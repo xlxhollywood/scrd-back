@@ -36,7 +36,8 @@ public class ThemeDto {
                 .build();
     }
 
-    public static ThemeDto from(Theme theme) {
+    // 테마를 받아서 Dto 로
+    public static ThemeDto toDto(Theme theme) {
         return ThemeDto.builder()
                 .id(theme.getId())
                 .title(theme.getTitle())

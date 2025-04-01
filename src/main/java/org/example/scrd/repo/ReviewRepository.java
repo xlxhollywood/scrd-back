@@ -1,3 +1,4 @@
+// ReviewRepository.java
 package org.example.scrd.repo;
 
 import org.example.scrd.domain.Review;
@@ -7,8 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ReviewRepository extends JpaRepository<Review, Long> {
+public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewRepositoryCustom {
     List<Review> findByUserId(Long userId);
     List<Review> findByThemeId(Long themeId);
-
 }

@@ -47,7 +47,7 @@ public class ThemeController {
      * */
     @GetMapping("/theme/{themeId}")
     public ResponseEntity<ThemeDto> getTheme(@PathVariable Long themeId) {
-        ThemeDto theme = ThemeDto.from(themeService.getThemeById(themeId));
+        ThemeDto theme = ThemeDto.toDto(themeService.getThemeById(themeId));
         return ResponseEntity.ok(theme);
     }
 

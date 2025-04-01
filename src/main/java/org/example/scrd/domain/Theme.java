@@ -32,7 +32,7 @@ public class Theme extends BaseEntity {
     private String branch; // 매장 이름
     private Integer playtime;
     private String proportion; // 장치 비율
-    //  private Float rating; // 테마 평점
+    private Float rating; // 테마 평점
 
 
     // 저장 테마
@@ -65,5 +65,10 @@ public class Theme extends BaseEntity {
         this.branch = dto.getBranch();
         this.brand = dto.getBrand();
         this.playtime = dto.getPlaytime() != null ? dto.getPlaytime() : -1;
+    }
+
+    public void updateRating(float avg) {
+        this.rating = avg;
+
     }
 }

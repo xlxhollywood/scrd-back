@@ -1,21 +1,16 @@
 package org.example.scrd.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.scrd.config.MongoConfig;
 import org.example.scrd.domain.Theme;
 import org.example.scrd.domain.ThemeDocument;
-import org.example.scrd.dto.ReviewDto;
 import org.example.scrd.dto.ThemeDto;
 import org.example.scrd.exception.NotFoundException;
-import org.example.scrd.exception.UnauthorizedAccessException;
 import org.example.scrd.repo.ThemeMongoRepository;
 import org.example.scrd.repo.ThemeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,7 +40,7 @@ public class ThemeService {
         List<Theme> themes = themeRepository.findAll();
         return themes
             .stream()
-            .map(ThemeDto::from)
+            .map(ThemeDto::toDto)
             .collect(Collectors.toList());
     }
 
@@ -67,7 +62,7 @@ public class ThemeService {
 
     public List<ThemeDto> searchThemes(String keyword) {
         List<Theme> themes = themeRepository.findByTitleContainingOrBrandContaining(keyword, keyword);
-        return themes.stream().map(ThemeDto::from).collect(Collectors.toList());
+        return themes.stream().map(ThemeDto::toDto).collect(Collectors.toList());
     }
 
 }
