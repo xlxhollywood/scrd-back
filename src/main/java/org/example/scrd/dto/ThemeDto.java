@@ -20,6 +20,7 @@ public class ThemeDto {
     private String brand;
     private String branch;
     private Integer playtime;
+    private Float rating;
     private List<String> themeAvailableTime;
 
     public static ThemeDto from(ThemeRequest request){
@@ -49,6 +50,7 @@ public class ThemeDto {
                 .branch(theme.getBranch())
                 .brand(theme.getBrand())
                 .playtime(theme.getPlaytime() != null ? theme.getPlaytime() : -1)
+                .rating(theme.getRating())
                 .build();
     }
 }

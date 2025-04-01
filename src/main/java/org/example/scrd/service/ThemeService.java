@@ -43,15 +43,15 @@ public class ThemeService {
             .map(ThemeDto::toDto)
             .collect(Collectors.toList());
     }
-
-    public List<String> getThemeAvailableTime(Long themeId) {
-        ThemeDocument document = themeMongoRepository.findByThemeId(themeId.intValue())
-                .stream()
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("해당 테마의 시간 정보를 찾을 수 없습니다."));
-
-        return document.getAvailableTimes();
-    }
+//    테마 id로 예약 시간대를 불러온다. 하지만 한 테마의 일주일 치 시간대를 볼 필요가 없어서 주석처리하였음..
+//    public List<String> getThemeAvailableTime(Long themeId) {
+//        ThemeDocument document = themeMongoRepository.findByThemeId(themeId.intValue())
+//                .stream()
+//                .findFirst()
+//                .orElseThrow(() -> new RuntimeException("해당 테마의 시간 정보를 찾을 수 없습니다."));
+//
+//        return document.getAvailableTimes();
+//    }
 
     public List<String> getAvailableTimesByDate(Long themeId, String date) {
         return themeMongoRepository.findByThemeIdAndDate(themeId.intValue(), date)
@@ -65,4 +65,9 @@ public class ThemeService {
         return themes.stream().map(ThemeDto::toDto).collect(Collectors.toList());
     }
 
+    public List<ThemeDto> getThemesSortedByRating() {
+        return themeRepository.findThemesOrderByReviewCountAndRating().stream()
+                .map(ThemeDto::toDto)
+                .collect(Collectors.toList());
+    }
 }

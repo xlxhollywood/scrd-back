@@ -36,11 +36,11 @@ public class ThemeController {
     /**
      * 전체 테마를 불러오는 API
      * */
-    @GetMapping("/theme")
-    public ResponseEntity<List<ThemeDto>> getThemes() {
-        List<ThemeDto> themes = themeService.getAllThemes();
-        return ResponseEntity.ok(themes);
-    }
+//    @GetMapping("/theme")
+//    public ResponseEntity<List<ThemeDto>> getThemes() {
+//        List<ThemeDto> themes = themeService.getAllThemes();
+//        return ResponseEntity.ok(themes);
+//    }
 
     /**
      * 특정 테마를 불러오는 API
@@ -73,6 +73,20 @@ public class ThemeController {
         List<ThemeDto> results = themeService.searchThemes(keyword);
         return ResponseEntity.ok(results);
     }
+
+
+    @GetMapping("/theme")
+    public ResponseEntity<List<ThemeDto>> getThemes(@RequestParam(required = false) String sort) {
+        List<ThemeDto> themes;
+        if ("rating".equalsIgnoreCase(sort)) {
+            themes = themeService.getThemesSortedByRating();
+        } else {
+            themes = themeService.getAllThemes();
+        }
+
+        return ResponseEntity.ok(themes);
+    }
+
 
 
 
