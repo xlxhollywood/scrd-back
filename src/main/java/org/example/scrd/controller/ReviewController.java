@@ -28,10 +28,13 @@ public class ReviewController {
             @PathVariable Long themeId,
             @RequestBody ReviewRequest request,
             @AuthenticationPrincipal User user) {
+
         Theme theme = themeService.getThemeById(themeId);
-        reviewService.addReview(ReviewDto.from(request), user.getId(), theme);
+        reviewService.addReview(ReviewDto.from(request), user.getId(), theme, request.getTagIds());
         return ResponseEntity.ok(ApiResponse.success());
     }
+
+
 
     /**
      * 내가 쓴 리뷰 보기

@@ -5,6 +5,9 @@ import lombok.*;
 import org.example.scrd.BaseEntity;
 import org.example.scrd.dto.ReviewDto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Builder
@@ -27,6 +30,10 @@ public class Review extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "themeId", nullable = false)
     private Theme theme;
+
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReviewTagMap> tagMaps = new ArrayList<>();
+
 
     public static Review addReviewFrom(User user, ReviewDto dto, Theme theme) {
         Review review =

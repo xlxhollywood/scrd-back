@@ -12,20 +12,19 @@ import org.example.scrd.BaseEntity;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "tag_map")
 public class ReviewTagMap extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "userId", nullable = false)
-    private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "themeId", nullable = false)
-    private Theme theme;
-
-    @ManyToOne
-    @JoinColumn(name = "reviewId", nullable = false)
+    // 연관된 리뷰
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "review_id")
     private Review review;
+
+    // 연관된 태그
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tag_id")
+    private Tag tag;
 }

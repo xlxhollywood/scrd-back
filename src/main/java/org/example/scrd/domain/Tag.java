@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.scrd.BaseEntity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Builder
@@ -16,9 +19,9 @@ public class Tag extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String tagName;
 
-    @ManyToOne
-    @JoinColumn(name = "reviewTagMapId", nullable = false)
-    private ReviewTagMap reviewTagMap;
+    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
+    private List<ReviewTagMap> reviewTagMaps = new ArrayList<>();
 }

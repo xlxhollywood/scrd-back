@@ -3,6 +3,8 @@ package org.example.scrd.dto.request;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @NoArgsConstructor
 @Getter
 public class ReviewRequest {
@@ -12,4 +14,5 @@ public class ReviewRequest {
     private int horror;
     private int activity;
     private Long themeId;
+    private List<Long> tagIds;
 }

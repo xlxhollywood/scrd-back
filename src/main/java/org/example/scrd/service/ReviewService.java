@@ -1,16 +1,11 @@
 package org.example.scrd.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.scrd.domain.Review;
-import org.example.scrd.domain.Role;
-import org.example.scrd.domain.Theme;
-import org.example.scrd.domain.User;
+import org.example.scrd.domain.*;
 import org.example.scrd.dto.ReviewDto;
 import org.example.scrd.exception.NotFoundException;
 import org.example.scrd.exception.UnauthorizedAccessException;
-import org.example.scrd.repo.ReviewRepository;
-import org.example.scrd.repo.ThemeRepository;
-import org.example.scrd.repo.UserRepository;
+import org.example.scrd.repo.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,26 +18,40 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
     private final ThemeRepository themeRepository;
+    private final TagRepository tagRepository;
+    private final ReviewTagMapRepository reviewTagMapRepository;
 
     @Transactional
-    public void addReview(ReviewDto dto, Long userId, Theme theme) {
+    public void addReview(ReviewDto dto, Long userId, Theme theme, List<Long> tagIds) {
+        // 기존 리뷰 저장 로직 유지
         Review review = Review.addReviewFrom(
                 userRepository.findById(userId)
                         .orElseThrow(() -> new NotFoundException("유저가 존재하지 않습니다.")),
                 dto,
                 theme
         );
-
         reviewRepository.save(review);
 
         // ✅ 테마의 리뷰 카운트 증가
         theme.increaseReviewCount();
         themeRepository.save(theme);
 
-        // 리뷰에서 테마에 가져오고 테마의 Id를 반환
+        // ✅ 평점 업데이트
         updateThemeRating(review.getTheme().getId());
-    }
 
+        // ✅ 태그 저장 추가
+        if (tagIds != null && !tagIds.isEmpty()) {
+            for (Long tagId : tagIds) {
+                Tag tag = tagRepository.findById(tagId)
+                        .orElseThrow(() -> new NotFoundException("해당 태그가 존재하지 않습니다."));
+                ReviewTagMap tagMap = ReviewTagMap.builder()
+                        .review(review)
+                        .tag(tag)
+                        .build();
+                reviewTagMapRepository.save(tagMap);
+            }
+        }
+    }
 
     public List<ReviewDto> getReviewListByUser(Long userId) {
         return reviewRepository.findByUserId(userId)
@@ -70,20 +79,18 @@ public class ReviewService {
             throw new UnauthorizedAccessException();
         }
 
+        // ✅ 리뷰-태그 연결 삭제
+        reviewTagMapRepository.deleteAllByReview(review);
+
+        // ✅ 테마의 리뷰 카운트 감소
         Theme theme = review.getTheme();
         reviewRepository.delete(review);
 
-        // ✅ 테마의 리뷰 카운트 감소
         theme.decreaseReviewCount();
         themeRepository.save(theme);
 
         updateThemeRating(theme.getId()); // 삭제 후 평점 갱신
     }
-
-
-//    public List<Review> searchReviews(String keyword, Long userId, Long themeId) {
-//        return reviewRepository.searchReviews(keyword, userId, themeId);
-//    }
 
     @Transactional
     public void updateThemeRating(Long themeId) {
