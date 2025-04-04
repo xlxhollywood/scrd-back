@@ -23,7 +23,13 @@ public class MongoConfig {
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(connectionString)
                 .serverApi(ServerApi.builder().version(ServerApiVersion.V1).build())
+                .applyToSocketSettings(builder ->
+                        builder.connectTimeout(10_000, java.util.concurrent.TimeUnit.MILLISECONDS)  // 연결 타임아웃 10초
+                                .readTimeout(30_000, java.util.concurrent.TimeUnit.MILLISECONDS))   // 읽기 타임아웃 30초
+                .applyToClusterSettings(builder ->
+                        builder.serverSelectionTimeout(10_000, java.util.concurrent.TimeUnit.MILLISECONDS)) // 서버 선택 타임아웃 10초
                 .build();
+
 
         return MongoClients.create(settings);
     }
