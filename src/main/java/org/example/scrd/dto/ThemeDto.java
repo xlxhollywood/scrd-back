@@ -21,6 +21,9 @@ public class ThemeDto {
     private String branch;
     private Integer playtime;
     private Float rating;
+    private Integer horror; // 테마 공포도
+    private Integer activity; // 테마 활동성
+    private Float level; // 테마 난이도
     private List<String> themeAvailableTime;
 
     public static ThemeDto from(ThemeRequest request){
@@ -51,6 +54,9 @@ public class ThemeDto {
                 .brand(theme.getBrand())
                 .playtime(theme.getPlaytime() != null ? theme.getPlaytime() : -1)
                 .rating(theme.getRating())
+                .horror(theme.getHorror())
+                .activity(theme.getActivity())
+                .level(theme.getLevel())
                 .build();
     }
 }

@@ -7,12 +7,15 @@ import org.example.scrd.dto.response.ThemeAvailableTimeResponse;
 import org.example.scrd.service.ThemeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import lombok.extern.slf4j.Slf4j;
+
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/scrd/api")
 @RequiredArgsConstructor
+@Slf4j
 public class ThemeController {
     private final ThemeService themeService;
 
@@ -87,6 +90,30 @@ public class ThemeController {
         return ResponseEntity.ok(themes);
     }
 
+
+
+    /**
+     * 필터 조건 기반 테마 조회 API
+     * ex: /scrd/api/theme/filter?horror=1&activity=1&minLevel=1.0&maxLevel=3.0&minRating=3.5&location=강남
+     */
+    @GetMapping("/theme/filter")
+    public ResponseEntity<List<ThemeDto>> filterThemes(
+            @RequestParam(required = false, name = "horror") Integer horror,
+            @RequestParam(required = false, name = "activity") Integer activity,
+            @RequestParam(required = false, name = "levelMin") Float minLevel,
+            @RequestParam(required = false, name = "levelMax") Float maxLevel,
+            @RequestParam(required = false, name = "ratingMin") Float minRating,
+            @RequestParam(required = false, name = "ratingMax") Float maxRating,
+            @RequestParam(required = false, name = "location") String location
+    ) {
+        log.info("🎯 [요청 파라미터] horror={}, activity={}, minLevel={}, maxLevel={}, minRating={}, maxRating={}, location={}",
+                horror, activity, minLevel, maxLevel, minRating, maxRating, location);
+
+        List<ThemeDto> themes = themeService.filterThemes(
+                horror, activity, minLevel, maxLevel, minRating, maxRating, location
+        );
+        return ResponseEntity.ok(themes);
+    }
 
 
 

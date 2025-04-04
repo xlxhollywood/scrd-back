@@ -1,6 +1,7 @@
 package org.example.scrd.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.scrd.domain.Theme;
 import org.example.scrd.domain.ThemeDocument;
 import org.example.scrd.dto.ThemeDto;
@@ -11,10 +12,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ThemeService {
     private final ThemeRepository themeRepository;
     private final ThemeMongoRepository themeMongoRepository;
@@ -70,4 +73,29 @@ public class ThemeService {
                 .map(ThemeDto::toDto)
                 .collect(Collectors.toList());
     }
+
+    public List<ThemeDto> filterThemes(
+            Integer horror,
+            Integer activity,
+            Float minLevel,
+            Float maxLevel,
+            Float minRating,
+            Float maxRating,
+            String location
+    ) {
+        log.info("🔍 [ThemeService] 필터링 실행: horror={}, activity={}, minLevel={}, maxLevel={}, minRating={}, maxRating={}, location={}",
+                horror, activity, minLevel, maxLevel, minRating, maxRating, location);
+
+        List<Theme> filtered = themeRepository.filterThemes(
+                horror, activity, minLevel, maxLevel, minRating, maxRating, location
+        );
+
+        log.info("✅ [필터링 결과] 총 {}개의 테마 반환됨", filtered.size());
+
+        return filtered.stream()
+                .map(ThemeDto::toDto)
+                .collect(Collectors.toList());
+    }
+
+
 }
