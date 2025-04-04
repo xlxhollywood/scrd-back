@@ -33,6 +33,9 @@ public class Theme extends BaseEntity {
     private Integer playtime;
     private String proportion; // 장치 비율
     private Float rating; // 테마 평점
+    private Integer horror; // 테마 공포도
+    private Integer activity; // 테마 활동성
+    private Float level;
 
 
     // 저장 테마
@@ -67,8 +70,11 @@ public class Theme extends BaseEntity {
         this.playtime = dto.getPlaytime() != null ? dto.getPlaytime() : -1;
     }
 
-    public void updateRating(float avg) {
-        this.rating = avg;
-
+    public void updateRatingAndFlags(float avgRating, float level, float horrorAvg, float activityAvg) {
+        this.rating = avgRating;
+        this.level = level;
+        this.horror = horrorAvg >= 0.5 ? 1 : 0;
+        this.activity = activityAvg >= 0.5 ? 1 : 0;
     }
+
 }

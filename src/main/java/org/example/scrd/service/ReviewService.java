@@ -24,7 +24,7 @@ public class ReviewService {
     private final UserRepository userRepository;
     private final ThemeRepository themeRepository;
 
-
+    @Transactional
     public void addReview(ReviewDto dto, Long userId, Theme theme) {
         Review review = Review.addReviewFrom(
                 userRepository.findById(userId)
@@ -78,13 +78,18 @@ public class ReviewService {
 
     @Transactional
     public void updateThemeRating(Long themeId) {
-        float avg = reviewRepository.getAverageScoreByThemeId(themeId);
+        float starsAvg = reviewRepository.getAverageScoreByThemeId(themeId);
+        float horrorAvg = reviewRepository.getAverageHorrorByThemeId(themeId);
+        float activityAvg = reviewRepository.getAverageActivityByThemeId(themeId);
+        float levelAvg = reviewRepository.getAverageLevelByThemeId(themeId);
+
         Theme theme = themeRepository.findById(themeId)
                 .orElseThrow(() -> new IllegalArgumentException("테마 없음"));
-        System.out.println("테마의 평균 avg : " + avg);
-        theme.updateRating(avg);
+
+        theme.updateRatingAndFlags(starsAvg,levelAvg, horrorAvg, activityAvg);
         themeRepository.save(theme);
     }
+
 
 
 }

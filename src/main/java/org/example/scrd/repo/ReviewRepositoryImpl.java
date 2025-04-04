@@ -39,4 +39,45 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
 
         return avg != null ? avg.floatValue() : 0.0f;
     }
+
+    @Override
+    public float getAverageHorrorByThemeId(Long themeId) {
+        QReview review = QReview.review;
+
+        Double avg = queryFactory
+                .select(review.horror.avg())
+                .from(review)
+                .where(review.theme.id.eq(themeId))
+                .fetchOne();
+
+        return avg != null ? avg.floatValue() : 0.0f;
+    }
+
+    @Override
+    public float getAverageActivityByThemeId(Long themeId) {
+        QReview review = QReview.review;
+
+        Double avg = queryFactory
+                .select(review.activity.avg())
+                .from(review)
+                .where(review.theme.id.eq(themeId))
+                .fetchOne();
+
+        return avg != null ? avg.floatValue() : 0.0f;
+    }
+
+    // ReviewRepositoryImpl.java
+    @Override
+    public Float getAverageLevelByThemeId(Long themeId) {
+        QReview review = QReview.review;
+
+        Double avg = queryFactory
+                .select(review.level.avg())
+                .from(review)
+                .where(review.theme.id.eq(themeId))
+                .fetchOne();
+
+        return avg != null ? avg.floatValue() : 0.0f;
+    }
+
 }

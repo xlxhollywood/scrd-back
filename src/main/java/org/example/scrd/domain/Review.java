@@ -15,8 +15,8 @@ public class Review extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String text;
-    private int level;
-    private int stars;
+    private int level; // 난이도
+    private int stars; // 평점
     private int horror;
     private int activity;
 
