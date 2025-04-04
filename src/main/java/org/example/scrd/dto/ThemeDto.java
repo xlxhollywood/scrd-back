@@ -24,6 +24,7 @@ public class ThemeDto {
     private Integer horror; // 테마 공포도
     private Integer activity; // 테마 활동성
     private Float level; // 테마 난이도
+    private Integer reviewCount; // 테마의 리뷰 개수
     private List<String> themeAvailableTime;
 
     public static ThemeDto from(ThemeRequest request){
@@ -57,6 +58,7 @@ public class ThemeDto {
                 .horror(theme.getHorror())
                 .activity(theme.getActivity())
                 .level(theme.getLevel())
+                .reviewCount(theme.getReviewCount())
                 .build();
     }
 }

@@ -36,6 +36,9 @@ public class Theme extends BaseEntity {
     private Integer horror; // 테마 공포도
     private Integer activity; // 테마 활동성
     private Float level;
+    @Column
+    private Integer reviewCount;
+
 
 
     // 저장 테마
@@ -76,5 +79,14 @@ public class Theme extends BaseEntity {
         this.horror = horrorAvg >= 0.5 ? 1 : 0;
         this.activity = activityAvg >= 0.5 ? 1 : 0;
     }
+
+    public void increaseReviewCount() {
+        this.reviewCount = (this.reviewCount != null ? this.reviewCount + 1 : 1);
+    }
+
+    public void decreaseReviewCount() {
+        this.reviewCount = (this.reviewCount != null && this.reviewCount > 0 ? this.reviewCount - 1 : 0);
+    }
+
 
 }

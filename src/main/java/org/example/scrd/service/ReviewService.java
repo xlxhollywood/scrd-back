@@ -34,6 +34,11 @@ public class ReviewService {
         );
 
         reviewRepository.save(review);
+
+        // ✅ 테마의 리뷰 카운트 증가
+        theme.increaseReviewCount();
+        themeRepository.save(theme);
+
         // 리뷰에서 테마에 가져오고 테마의 Id를 반환
         updateThemeRating(review.getTheme().getId());
     }
@@ -65,10 +70,14 @@ public class ReviewService {
             throw new UnauthorizedAccessException();
         }
 
-        Long themeId = review.getTheme().getId(); // 삭제 전에 테마 ID 확보
+        Theme theme = review.getTheme();
         reviewRepository.delete(review);
 
-        updateThemeRating(themeId); // 삭제 후 평점 갱신
+        // ✅ 테마의 리뷰 카운트 감소
+        theme.decreaseReviewCount();
+        themeRepository.save(theme);
+
+        updateThemeRating(theme.getId()); // 삭제 후 평점 갱신
     }
 
 
@@ -86,7 +95,7 @@ public class ReviewService {
         Theme theme = themeRepository.findById(themeId)
                 .orElseThrow(() -> new IllegalArgumentException("테마 없음"));
 
-        theme.updateRatingAndFlags(starsAvg,levelAvg, horrorAvg, activityAvg);
+        theme.updateRatingAndFlags(starsAvg, levelAvg, horrorAvg, activityAvg);
         themeRepository.save(theme);
     }
 
