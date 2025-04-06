@@ -54,6 +54,14 @@ public class PartyService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("유저 없음"));
 
+        if (post.getWriter().getId().equals(user.getId())) {
+            throw new IllegalStateException("작성자는 자신의 모집글에 신청할 수 없습니다.");
+        }
+
+        if (post.isClosed() || post.getCurrentParticipants() >= post.getMaxParticipants()) {
+            throw new IllegalStateException("모집이 마감된 파티입니다.");
+        }
+
         if (joinRepository.findByPartyPostIdAndUserId(postId, userId).isPresent()) {
             throw new IllegalStateException("이미 신청함");
         }
