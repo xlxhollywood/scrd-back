@@ -6,11 +6,11 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum Tier {
-    ONE("일단계"),
-    TWO("이단계"),
-    THREE("삼단계"),
-    FOUR("사단계"),
-    FIVE("오단계");
+    ONE("1"),
+    TWO("2"),
+    THREE("3"),
+    FOUR("4"),
+    FIVE("5");
 
     private final String tierE;
 

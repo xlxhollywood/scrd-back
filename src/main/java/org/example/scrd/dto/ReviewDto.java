@@ -3,12 +3,16 @@ package org.example.scrd.dto;
 import lombok.Builder;
 import lombok.Getter;
 import org.example.scrd.domain.Review;
+import org.example.scrd.domain.User;
 import org.example.scrd.dto.request.ReviewRequest;
 import java.util.List;
 
 @Builder
 @Getter
 public class ReviewDto {
+    private User user;
+    private String userTier;
+    private String userName;
     private Long id;
     private String text;
     private int level;
@@ -35,6 +39,8 @@ public class ReviewDto {
                 .toList();
 
         return ReviewDto.builder()
+                .userTier(review.getUser().getTier().getTierE()) // <- 여기 수정
+                .userName(review.getUser().getName())
                 .id(review.getId())
                 .text(review.getText())
                 .level(review.getLevel())
