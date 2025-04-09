@@ -48,15 +48,37 @@ public class PartyController {
         partyService.updateJoinStatus(joinId, request.getStatus());
         return ResponseEntity.ok(ApiResponse.success());
     }
-    // 파티 참여 글을 확인하는 API
-
+    // 알림 창에서 파티 참여 글을 확인하는 API
     @GetMapping("/{postId}/joins")
     public ResponseEntity<ApiResponse<List<PartyJoinDto>>> getJoinRequests(
             @PathVariable Long postId,
             @RequestParam(required = false) String status) {
+        System.out.println("DELETE method");
         List<PartyJoinDto> joins = partyService.getJoinRequests(postId, status);
         return ResponseEntity.ok(ApiResponse.success(joins));
     }
+
+    //TODO : 일행 게시글 삭제 기능이 필요함.
+    // 일행 모집 글 삭제
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<ApiResponse<Object>> deletePartyPost(
+            @PathVariable Long postId,
+            @AuthenticationPrincipal User user
+    ) {
+        partyService.deletePartyPost(postId, user.getId());
+        return ResponseEntity.ok(ApiResponse.success());
+    }
+
+    //TODO : 신청한 요청을 취소하는 메서드가 필요함
+    @DeleteMapping("/{postId}/join")
+    public ResponseEntity<ApiResponse<Object>> cancelJoin(
+            @PathVariable Long postId,
+            @AuthenticationPrincipal User user
+    ) {
+        partyService.cancelJoin(postId, user.getId());
+        return ResponseEntity.ok(ApiResponse.success());
+    }
+
 
 
 }

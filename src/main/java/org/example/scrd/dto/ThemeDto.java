@@ -21,11 +21,11 @@ public class ThemeDto {
     private String branch;
     private Integer playtime;
     private Float rating;
+    private String proportion; // 테마 비율
     private Integer horror; // 테마 공포도
     private Integer activity; // 테마 활동성
     private Float level; // 테마 난이도
     private Integer reviewCount; // 테마의 리뷰 개수
-    private List<String> themeAvailableTime;
 
     public static ThemeDto from(ThemeRequest request){
         return ThemeDto.builder()
@@ -59,6 +59,29 @@ public class ThemeDto {
                 .activity(theme.getActivity())
                 .level(theme.getLevel())
                 .reviewCount(theme.getReviewCount())
+                .build();
+    }
+
+    public static ThemeDto toWebDto(Theme theme) {
+        return ThemeDto.builder()
+                .id(theme.getId())
+                .title(theme.getTitle())
+                .description(theme.getDescription())
+                .location(theme.getLocation())
+                .price(theme.getPrice() != null ? theme.getPrice() : -1)
+                .image(theme.getImage())
+                .url(theme.getUrl())
+                .branch(theme.getBranch())
+                .brand(theme.getBrand())
+                .playtime(theme.getPlaytime() != null ? theme.getPlaytime() : -1)
+                .rating(theme.getRating())
+                .horror(theme.getHorror())
+                .activity(theme.getActivity())
+                .level(theme.getLevel())
+                .reviewCount(theme.getReviewCount())
+                .proportion(theme.getProportion())
+                .horror(theme.getHorror())
+                .activity(theme.getActivity())
                 .build();
     }
 }

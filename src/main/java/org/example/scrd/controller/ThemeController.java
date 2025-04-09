@@ -56,6 +56,15 @@ public class ThemeController {
 
 
     /**
+     * 특정 테마를 불러오는 API
+     * */
+    @GetMapping("web/theme/{themeId}")
+    public ResponseEntity<ThemeDto> getThemeDetail (@PathVariable Long themeId) {
+        ThemeDto theme = ThemeDto.toWebDto(themeService.getThemeById(themeId));
+        return ResponseEntity.ok(theme);
+    }
+
+    /**
      * 특정 테마의 ID와 날짜로 특정 날짜의 테마 예약 가능 시간대를 가져와 줌.
      * */
     @GetMapping("/theme/{themeId}/available-times")

@@ -33,40 +33,62 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain)
             throws ServletException, IOException {
 
-        // 특정 경로에 대해 필터를 무시하고 다음 필터로 이동
-        if (request.getRequestURI().startsWith("/error") ||
-                request.getRequestURI().startsWith("/scrd/auth/") ||
-                request.getRequestURI().startsWith("/scrd/every") ||
-                request.getRequestURI().equals("/")
+        String uri = request.getRequestURI();
+
+        // 1) 특정 경로는 필터 패스
+        if (uri.startsWith("/error") ||
+                uri.startsWith("/scrd/auth/") ||
+                uri.startsWith("/scrd/every") ||
+                uri.equals("/")
         ) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // Authorization 헤더에서 토큰을 가져옴
+        // 2) Authorization 헤더
         String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        // Refresh Token 헤더에서 값을 가져옴
+        // 3) Refresh Token 헤더 (X-Refresh-Token)
         String refreshToken = getRefreshTokenFromHeader(request);
 
-        // Authorization 헤더가 없는 경우 예외 처리
-        if (authorizationHeader == null) throw new DoNotLoginException();
+        // 4) 만약 Authorization 헤더가 없다면 → 쿼리 파라미터 "token" 시도
+        if (authorizationHeader == null) {
+            // => SSE나 특수 케이스 (쿼리 파라미터로 JWT 전송)
+            String paramToken = request.getParameter("token");
 
-        // Authorization 헤더가 "Bearer "로 시작하지 않으면 예외 처리
-        if (!authorizationHeader.startsWith("Bearer "))
+            // 쿼리 파라미터에도 토큰이 없으면 -> 기존 로직과 동일하게 로그인 안 된 사용자 처리
+            if (paramToken == null) {
+                throw new DoNotLoginException();
+            }
+
+            // 쿼리 파라미터로 토큰이 있다면,
+            // => Refresh Token이 있는지 없는지 보고 기존 로직 재사용
+            if (refreshToken == null) {
+                processAccessToken(request, response, filterChain, paramToken);
+            } else {
+                processRefreshToken(request, response, filterChain, refreshToken);
+            }
+
+            return; // 이미 필터 체인을 진행하거나 종료했으므로 return
+        }
+
+        // 5) 여기부터는 "Authorization 헤더가 있는 경우" 기존 로직 그대로
+        if (!authorizationHeader.startsWith("Bearer ")) {
             throw new WrongTokenException("Bearer 로 시작하지 않는 토큰입니다.");
+        }
 
-        // Bearer 이후의 실제 토큰 값 추출
+        // Bearer 이후의 실제 토큰 값
         String token = authorizationHeader.split(" ")[1];
 
-        // Refresh Token이 없는 경우 Access Token만 처리
         if (refreshToken == null) {
+            // Access Token만 처리
             processAccessToken(request, response, filterChain, token);
         } else {
-            // Refresh Token이 있는 경우 Access/Refresh Token을 처리
+            // Refresh Token이 있는 경우 Access/Refresh 토큰 재발급
             processRefreshToken(request, response, filterChain, refreshToken);
         }
     }
+
 
     /**
      * Refresh Token 헤더에서 값을 추출하는 메서드
