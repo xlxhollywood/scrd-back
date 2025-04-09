@@ -65,7 +65,7 @@ public class ThemeService {
 
     public List<ThemeDto> searchThemes(String keyword) {
         List<Theme> themes = themeRepository.findByTitleContainingOrBrandContaining(keyword, keyword);
-        return themes.stream().map(ThemeDto::toDto).collect(Collectors.toList());
+        return themes.stream().map(ThemeDto::toWebThemeSearchDto).collect(Collectors.toList());
     }
 
     public List<ThemeDto> getThemesSortedByRating() {

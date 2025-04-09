@@ -1,5 +1,6 @@
 package org.example.scrd.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
 import org.example.scrd.domain.Theme;
@@ -7,6 +8,7 @@ import org.example.scrd.dto.request.ThemeRequest;
 
 import java.util.List;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
 @Getter
 public class ThemeDto {
@@ -59,6 +61,18 @@ public class ThemeDto {
                 .activity(theme.getActivity())
                 .level(theme.getLevel())
                 .reviewCount(theme.getReviewCount())
+                .build();
+    }
+
+    // 검색용 dto
+    public static ThemeDto toWebThemeSearchDto(Theme theme) {
+        return ThemeDto.builder()
+                .id(theme.getId())
+                .title(theme.getTitle())
+                .location(theme.getLocation())
+                .image(theme.getImage())
+                .branch(theme.getBranch())
+                .brand(theme.getBrand())
                 .build();
     }
 
