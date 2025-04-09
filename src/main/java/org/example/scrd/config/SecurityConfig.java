@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -49,8 +50,9 @@ public class SecurityConfig {
                         UsernamePasswordAuthenticationFilter.class)
                 // JWT 토큰을 인증하기 위한 JwtTokenFilter를 UsernamePasswordAuthenticationFilter 앞에 추가
                 .sessionManagement(
-                session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request -> request
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // ✅ 이 줄 추가!
                         .requestMatchers("/scrd/auth/**", "/error" ,"/").permitAll()
                         .requestMatchers("/scrd/every/**").permitAll()
                         .requestMatchers("/scrd/api/**").authenticated() // 인증된 사용자만
@@ -63,7 +65,8 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         // 허용할 Origin 설정 (ex: 클라이언트 도메인)
-        config.setAllowedOrigins(hostClient); // 클라이언트 도메인
+        config.setAllowedOriginPatterns(hostClient);
+//        config.addAllowedOriginPattern("*"); // ⭐ 여기! 모든 Origin 허용
         // 허용할 HTTP 메서드 설정
         config.setAllowedMethods(Arrays.asList("POST", "GET", "PATCH", "DELETE", "PUT"));
         // 요청에 허용할 헤더 설정 (Authorization, Content-Type, X-Refresh-Token 등)
