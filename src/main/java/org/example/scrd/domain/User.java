@@ -39,6 +39,11 @@ public class User extends BaseEntity {
     private Tier tier;
     private String gender;
     private String birth;
+
+    @Setter
+    @Column(columnDefinition = "varchar(30)")
+    private String nickName;
+
     @Setter
     private int point; // 결제 시스템 적용 후 사용되는 포인트 review 작성시 +500
     @Setter
