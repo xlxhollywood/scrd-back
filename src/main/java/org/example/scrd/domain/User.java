@@ -60,7 +60,7 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private List<SavedTheme> likes = new ArrayList<>();
 
-    // ***추후 성별, 생일 받으면 빌더 타입 수정해야함.
+    // TODO: 추후 성별, 생일 받으면 빌더 타입 수정해야함.
     public static User from(UserDto dto){
         return User.builder()
                 .kakaoId(dto.getKakaoId())

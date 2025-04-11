@@ -9,6 +9,7 @@ import org.example.scrd.dto.Tier;
 @Getter
 public class UserResponse {
     private String name;
+    private String nickName;
     private String email;
     private String profileImageUrl;
     private Tier tier;
@@ -20,6 +21,7 @@ public class UserResponse {
     public static UserResponse from(User user) {
         UserResponse response = new UserResponse();
         response.name = user.getName();
+        response.nickName = user.getNickName();
         response.email = user.getEmail();
         response.profileImageUrl = user.getProfileImageUrl();
         response.tier = user.getTier();

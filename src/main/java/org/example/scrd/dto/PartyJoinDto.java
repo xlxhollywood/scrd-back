@@ -16,7 +16,7 @@ public class PartyJoinDto {
         return new PartyJoinDto(
                 join.getId(),
                 join.getUser().getId(),
-                join.getUser().getName(), // 필요 시 nickname 등으로 수정
+                join.getUser().getNickName(),
                 join.getStatus().name()
         );
     }

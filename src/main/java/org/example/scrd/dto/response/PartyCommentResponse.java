@@ -21,7 +21,7 @@ public class PartyCommentResponse {
         return PartyCommentResponse.builder()
                 .id(comment.getId())
                 .content(comment.getContent())
-                .writerName(comment.getWriter().getName())
+                .writerName(comment.getWriter().getNickName())
                 .parentId(comment.getParent() != null ? comment.getParent().getId() : null)
                 .regDate(comment.getRegDate())
                 .children(comment.getChildren().stream()  // ← 여기서 자식 댓글들을

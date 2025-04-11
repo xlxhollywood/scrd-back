@@ -12,6 +12,7 @@ public class UserDto {
     private Long id;
     private Long kakaoId;
     private String name;
+    private String nickName;
     private String email;
     private String profileImageUrl;
     private String tier;
@@ -24,7 +25,7 @@ public class UserDto {
         return UserDto.builder()
                 .id(user.getId())
                 .kakaoId(user.getKakaoId())
-                .name(user.getName())
+                .nickName(user.getNickName())
                 .email(user.getEmail())
                 .profileImageUrl(user.getProfileImageUrl())
                 .build();
@@ -36,7 +37,7 @@ public class UserDto {
             userDtos.add(UserDto.builder()
                     .id(user.getId())
                     .kakaoId(user.getKakaoId())
-                    .name(user.getName())
+                    .nickName(user.getNickName())
                     .email(user.getEmail())
                     .profileImageUrl(user.getProfileImageUrl())
                     .build());

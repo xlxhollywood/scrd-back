@@ -76,7 +76,7 @@ public class PartyService {
                 partyPost.getWriter(),                     // 알림 받는 사람 (호스트)
                 user,                                 // 알림 보낸 사람 (신청자)
                 Notification.NotificationType.JOIN_REQUEST,
-                user.getName() + "님이 파티에 참여 신청했습니다.",
+                user.getNickName() + "님이 파티에 참여 신청했습니다.",
                 partyPost
         );
     }

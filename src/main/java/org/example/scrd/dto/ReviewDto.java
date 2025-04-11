@@ -40,7 +40,7 @@ public class ReviewDto {
 
         return ReviewDto.builder()
                 .userTier(review.getUser().getTier().getTierE()) // <- 여기 수정
-                .userName(review.getUser().getName())
+                .userName(review.getUser().getNickName())
                 .id(review.getId())
                 .text(review.getText())
                 .level(review.getLevel())
