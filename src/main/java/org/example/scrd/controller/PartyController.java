@@ -22,6 +22,11 @@ public class PartyController {
 
     private final PartyService partyService;
 
+    //TODO : 일행 post GET mapping 필요함
+
+
+
+
     @PostMapping("/{themeId}")
     public ResponseEntity<ApiResponse<Long>> createPost(
             @PathVariable Long themeId,
@@ -48,7 +53,8 @@ public class PartyController {
         partyService.updateJoinStatus(joinId, request.getStatus());
         return ResponseEntity.ok(ApiResponse.success());
     }
-    // 알림 창에서 파티 참여 글을 확인하는 API
+
+    // 알림 창에서 파티 참여 글을 확인하는 ** API 일행 신청자들 목록 확인 (PENDING만 필터링)
     @GetMapping("/{postId}/joins")
     public ResponseEntity<ApiResponse<List<PartyJoinDto>>> getJoinRequests(
             @PathVariable Long postId,
@@ -58,7 +64,7 @@ public class PartyController {
         return ResponseEntity.ok(ApiResponse.success(joins));
     }
 
-    //TODO : 일행 게시글 삭제 기능이 필요함.
+
     // 일행 모집 글 삭제
     @DeleteMapping("/{postId}")
     public ResponseEntity<ApiResponse<Object>> deletePartyPost(
@@ -69,7 +75,7 @@ public class PartyController {
         return ResponseEntity.ok(ApiResponse.success());
     }
 
-    //TODO : 신청한 요청을 취소하는 메서드가 필요함
+    //TODO : 신청한 요청을 취소
     @DeleteMapping("/{postId}/join")
     public ResponseEntity<ApiResponse<Object>> cancelJoin(
             @PathVariable Long postId,

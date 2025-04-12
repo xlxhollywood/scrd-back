@@ -10,9 +10,9 @@ import java.util.List;
 @Builder
 @Getter
 public class ReviewDto {
-    private User user;
+
     private String userTier;
-    private String userName;
+    private String nickName;
     private Long id;
     private String text;
     private int level;
@@ -40,7 +40,7 @@ public class ReviewDto {
 
         return ReviewDto.builder()
                 .userTier(review.getUser().getTier().getTierE()) // <- 여기 수정
-                .userName(review.getUser().getNickName())
+                .nickName(review.getUser().getNickName())
                 .id(review.getId())
                 .text(review.getText())
                 .level(review.getLevel())
