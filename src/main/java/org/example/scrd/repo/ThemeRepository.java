@@ -10,4 +10,7 @@ import java.util.List;
 public interface ThemeRepository extends JpaRepository<Theme, Long>, ThemeRepositoryCustom {
     List<Theme> findByTitleContainingOrBrandContaining(String title, String brand);
     List<Theme> findAllByOrderByRatingDesc(); // 평점 내림차순 정렬
+
+
+
 }

@@ -1,11 +1,13 @@
 package org.example.scrd.repo;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.example.scrd.domain.QReview;
 import org.example.scrd.domain.QTheme;
 import org.example.scrd.domain.Theme;
+import org.example.scrd.dto.ThemeDto;
 
 import java.util.List;
 import java.util.Optional;

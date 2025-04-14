@@ -6,9 +6,8 @@ import lombok.Getter;
 import org.example.scrd.domain.Theme;
 import org.example.scrd.dto.request.ThemeRequest;
 
-import java.util.List;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
 @Getter
 public class ThemeDto {

@@ -1,6 +1,7 @@
 package org.example.scrd.repo;
 
 import org.example.scrd.domain.Theme;
+import org.example.scrd.dto.ThemeDto;
 
 import java.util.List;
 import java.util.Optional;
