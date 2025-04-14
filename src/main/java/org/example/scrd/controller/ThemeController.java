@@ -86,7 +86,7 @@ public class ThemeController {
         return ResponseEntity.ok(results);
     }
 
-
+    // Default  .. 추천 + 평점 많은 순으로 테마 불러오기
     @GetMapping("/theme")
     public ResponseEntity<List<ThemeDto>> getThemes(@RequestParam(required = false) String sort) {
         List<ThemeDto> themes;
@@ -98,6 +98,23 @@ public class ThemeController {
 
         return ResponseEntity.ok(themes);
     }
+
+    @GetMapping("/theme/paged")
+    public ResponseEntity<List<ThemeDto>> getThemesPaged(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(required = false) String sort
+    ) {
+        List<ThemeDto> themes;
+        if ("rating".equalsIgnoreCase(sort)) {
+            themes = themeService.getThemesSortedByRating(page, size);
+        } else {
+            themes = themeService.getAllThemes(page, size);
+        }
+
+        return ResponseEntity.ok(themes);
+    }
+
 
 
 

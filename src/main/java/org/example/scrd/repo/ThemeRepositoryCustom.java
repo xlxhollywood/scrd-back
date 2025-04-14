@@ -7,6 +7,8 @@ import java.util.Optional;
 
 public interface ThemeRepositoryCustom {
     List<Theme> findThemesOrderByReviewCountAndRating();
+    List<Theme> findThemesOrderByReviewCountAndRating(int page, int size);
+
     List<Theme> filterThemes(
             Integer horror,
             Integer activity,

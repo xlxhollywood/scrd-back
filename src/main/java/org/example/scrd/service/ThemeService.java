@@ -8,6 +8,9 @@ import org.example.scrd.dto.ThemeDto;
 import org.example.scrd.exception.NotFoundException;
 import org.example.scrd.repo.ThemeMongoRepository;
 import org.example.scrd.repo.ThemeRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,6 +76,22 @@ public class ThemeService {
                 .map(ThemeDto::toDto)
                 .collect(Collectors.toList());
     }
+
+    public List<ThemeDto> getThemesSortedByRating(int page, int size) {
+        return themeRepository.findThemesOrderByReviewCountAndRating(page, size).stream()
+                .map(ThemeDto::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<ThemeDto> getAllThemes(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        return themeRepository.findAll(pageable)
+                .stream()
+                .map(ThemeDto::toDto)
+                .collect(Collectors.toList());
+    }
+
+
 
     public List<ThemeDto> filterThemes(
             Integer horror,

@@ -32,6 +32,25 @@ public class ThemeRepositoryCustomImpl implements ThemeRepositoryCustom {
                 .fetch();
     }
 
+    @Override
+    public List<Theme> findThemesOrderByReviewCountAndRating(int page, int size) {
+        QTheme theme = QTheme.theme;
+        QReview review = QReview.review;
+
+        return queryFactory
+                .select(theme)
+                .from(review)
+                .join(review.theme, theme)
+                .groupBy(theme)
+                .orderBy(
+                        review.count().desc(),
+                        review.stars.avg().desc()
+                )
+                .offset((long) page * size)
+                .limit(size)
+                .fetch();
+    }
+
 
 
     @Override
