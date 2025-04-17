@@ -15,4 +15,6 @@ public class ReviewRequest {
     private int activity;
     private Long themeId;
     private List<Long> tagIds;
+    private Boolean isSuccessful;
+    private Integer hintUsageCount;
 }

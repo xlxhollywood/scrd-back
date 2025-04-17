@@ -3,14 +3,12 @@ package org.example.scrd.dto;
 import lombok.Builder;
 import lombok.Getter;
 import org.example.scrd.domain.Review;
-import org.example.scrd.domain.User;
-import org.example.scrd.dto.request.ReviewRequest;
-import java.util.List;
+import org.example.scrd.domain.Theme;
 
+import java.util.List;
 @Builder
 @Getter
-public class ReviewDto {
-
+public class MyReviewResponseDto {
     private String userTier;
     private String nickName;
     private Long id;
@@ -21,25 +19,21 @@ public class ReviewDto {
     private int activity;
     private List<String> tagNames; // 태그 이름 리스트 추가
 
-    // 리뷰 등록용 Dto
-    public static ReviewDto from(ReviewRequest request) {
-        return ReviewDto.builder()
-                .text(request.getText())
-                .level(request.getLevel())
-                .stars(request.getStars())
-                .horror(request.getHorror())
-                .activity(request.getActivity())
-                .build();
-    }
+    private String themeTitle;
+    private String themeBranch;
+    private String themeLocation;
+    private String themeImage;
 
-    // 리뷰 가져오기용 Dto
-    public static ReviewDto from(Review review) {
+
+    public static MyReviewResponseDto from(Review review) {
         List<String> tagNames = review.getTagMaps().stream()
                 .map(tagMap -> tagMap.getTag().getTagName())
                 .toList();
 
-        return ReviewDto.builder()
-                .userTier(review.getUser().getTier().getTierE()) // <- 여기 수정
+        Theme theme = review.getTheme(); // Review -> Theme 연관관계
+
+        return MyReviewResponseDto.builder()
+                .userTier(review.getUser().getTier().getTierE())
                 .nickName(review.getUser().getNickName())
                 .id(review.getId())
                 .text(review.getText())
@@ -48,6 +42,12 @@ public class ReviewDto {
                 .horror(review.getHorror())
                 .activity(review.getActivity())
                 .tagNames(tagNames)
+
+                // 🔽 추가된 부분
+                .themeTitle(theme.getTitle())
+                .themeBranch(theme.getBranch())
+                .themeLocation(theme.getLocation())
+                .themeImage(theme.getImage())
                 .build();
     }
 }

@@ -1,6 +1,7 @@
 package org.example.scrd.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.example.scrd.domain.Theme;
@@ -10,6 +11,7 @@ import org.example.scrd.dto.request.ThemeRequest;
 //@JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
 @Getter
+@AllArgsConstructor
 public class ThemeDto {
     private Long id;
     private String title;

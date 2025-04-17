@@ -2,7 +2,9 @@ package org.example.scrd.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.scrd.domain.*;
-import org.example.scrd.dto.ReviewDto;
+import org.example.scrd.dto.MyReviewResponseDto;
+import org.example.scrd.dto.ReviewCreateRequestDto;
+import org.example.scrd.dto.ThemeReviewResponseDto;
 import org.example.scrd.exception.NotFoundException;
 import org.example.scrd.exception.UnauthorizedAccessException;
 import org.example.scrd.repo.*;
@@ -22,7 +24,7 @@ public class ReviewService {
     private final ReviewTagMapRepository reviewTagMapRepository;
 
     @Transactional
-    public void addReview(ReviewDto dto, Long userId, Theme theme, List<Long> tagIds) {
+    public void addReview(ReviewCreateRequestDto dto, Long userId, Theme theme, List<Long> tagIds) {
         // 기존 리뷰 저장 로직 유지
         Review review = Review.addReviewFrom(
                 userRepository.findById(userId)
@@ -32,14 +34,11 @@ public class ReviewService {
         );
         reviewRepository.save(review);
 
-        // ✅ 테마의 리뷰 카운트 증가
         theme.increaseReviewCount();
         themeRepository.save(theme);
 
-        // ✅ 평점 업데이트
         updateThemeRating(review.getTheme().getId());
 
-        // ✅ 태그 저장 추가
         if (tagIds != null && !tagIds.isEmpty()) {
             for (Long tagId : tagIds) {
                 Tag tag = tagRepository.findById(tagId)
@@ -53,17 +52,17 @@ public class ReviewService {
         }
     }
 
-    public List<ReviewDto> getReviewListByUser(Long userId) {
+    public List<MyReviewResponseDto> getReviewListByUser(Long userId) {
         return reviewRepository.findByUserId(userId)
                 .stream()
-                .map(ReviewDto::from)
+                .map(MyReviewResponseDto::from)
                 .collect(Collectors.toList());
     }
 
-    public List<ReviewDto> getReviewListByTheme(Long themeId) {
+    public List<ThemeReviewResponseDto> getReviewListByTheme(Long themeId) {
         return reviewRepository.findByThemeId(themeId)
                 .stream()
-                .map(ReviewDto::from)
+                .map(ThemeReviewResponseDto::from)
                 .collect(Collectors.toList());
     }
 

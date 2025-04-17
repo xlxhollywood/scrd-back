@@ -3,7 +3,7 @@ package org.example.scrd.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.scrd.BaseEntity;
-import org.example.scrd.dto.ReviewDto;
+import org.example.scrd.dto.ReviewCreateRequestDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +23,10 @@ public class Review extends BaseEntity {
     private int horror;
     private int activity;
 
+    private Boolean isSuccessful;
+
+    private Integer hintUsageCount;
+
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
     private User user;
@@ -35,7 +39,7 @@ public class Review extends BaseEntity {
     private List<ReviewTagMap> tagMaps = new ArrayList<>();
 
 
-    public static Review addReviewFrom(User user, ReviewDto dto, Theme theme) {
+    public static Review addReviewFrom(User user, ReviewCreateRequestDto dto, Theme theme) {
         Review review =
                 Review.builder()
                         .user(user.addReviewFrom(user))
@@ -44,6 +48,8 @@ public class Review extends BaseEntity {
                         .stars(dto.getStars())
                         .horror(dto.getHorror())
                         .activity(dto.getActivity())
+                        .isSuccessful(dto.getIsSuccessful())
+                        .hintUsageCount(dto.getHintUsageCount())
                         .theme(theme)
                         .build();
         return review;

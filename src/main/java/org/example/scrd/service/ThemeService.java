@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.scrd.domain.Theme;
 import org.example.scrd.domain.ThemeDocument;
+import org.example.scrd.dto.MobileThemeDto;
 import org.example.scrd.dto.ThemeDto;
 import org.example.scrd.exception.NotFoundException;
 import org.example.scrd.repo.ThemeMongoRepository;
@@ -14,6 +15,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -114,6 +117,20 @@ public class ThemeService {
         return filtered.stream()
                 .map(ThemeDto::toDto)
                 .collect(Collectors.toList());
+    }
+
+
+    public List<MobileThemeDto> getThemesWithAvailableTime(int page, int size) {
+        List<Theme> themes = themeRepository.findThemesOrderByReviewCountAndRating(page, size);
+        return themes.stream().map(theme -> {
+            // 오늘 날짜 기준 예약 가능 시간 조회
+            String today = LocalDate.now().toString();
+            System.out.println("오늘 날짜 : " + today);
+            List<String> times = themeMongoRepository.findByThemeIdAndDate(theme.getId().intValue(), today)
+                    .map(ThemeDocument::getAvailableTimes)
+                    .orElse(Collections.emptyList());
+            return MobileThemeDto.from(theme, times);
+        }).collect(Collectors.toList());
     }
 
 

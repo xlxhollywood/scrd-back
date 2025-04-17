@@ -1,6 +1,7 @@
 package org.example.scrd.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.scrd.dto.MobileThemeDto;
 import org.example.scrd.dto.ThemeDto;
 import org.example.scrd.dto.request.ThemeRequest;
 import org.example.scrd.dto.response.ThemeAvailableTimeResponse;
@@ -36,14 +37,6 @@ public class ThemeController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * 전체 테마를 불러오는 API
-     * */
-//    @GetMapping("/theme")
-//    public ResponseEntity<List<ThemeDto>> getThemes() {
-//        List<ThemeDto> themes = themeService.getAllThemes();
-//        return ResponseEntity.ok(themes);
-//    }
 
     /**
      * 특정 테마를 불러오는 API
@@ -72,6 +65,7 @@ public class ThemeController {
             @PathVariable Long themeId,
             @RequestParam String date // "yyyy-MM-dd" 형식 가정
     ) {
+        System.out.println("called");
         List<String> availableTime = themeService.getAvailableTimesByDate(themeId, date);
         ThemeAvailableTimeResponse themeAvailableTimeResponse = new ThemeAvailableTimeResponse(date,availableTime);
         return ResponseEntity.ok(themeAvailableTimeResponse);
@@ -99,21 +93,21 @@ public class ThemeController {
         return ResponseEntity.ok(themes);
     }
 
-    @GetMapping("/theme/paged")
-    public ResponseEntity<List<ThemeDto>> getThemesPaged(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size,
-            @RequestParam(required = false) String sort
-    ) {
-        List<ThemeDto> themes;
-        if ("rating".equalsIgnoreCase(sort)) {
-            themes = themeService.getThemesSortedByRating(page, size);
-        } else {
-            themes = themeService.getAllThemes(page, size);
-        }
-
-        return ResponseEntity.ok(themes);
-    }
+//    @GetMapping("/theme/paged")
+//    public ResponseEntity<List<ThemeDto>> getThemesPaged(
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "20") int size,
+//            @RequestParam(required = false) String sort
+//    ) {
+//        List<ThemeDto> themes;
+//        if ("rating".equalsIgnoreCase(sort)) {
+//            themes = themeService.getThemesSortedByRating(page, size);
+//        } else {
+//            themes = themeService.getAllThemes(page, size);
+//        }
+//
+//        return ResponseEntity.ok(themes);
+//    }
 
 
 
@@ -142,6 +136,23 @@ public class ThemeController {
     }
 
 
+    @GetMapping("/theme/paged")
+    public ResponseEntity<List<?>> getThemesPaged(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(required = false) String sort,
+            @RequestParam(defaultValue = "web") String platform // "web" or "mobile"
+    ) {
+        if ("mobile".equalsIgnoreCase(platform)) {
+            List<MobileThemeDto> mobileThemes = themeService.getThemesWithAvailableTime(page, size);
+            return ResponseEntity.ok(mobileThemes);
+        } else {
+            List<ThemeDto> themes = "rating".equalsIgnoreCase(sort)
+                    ? themeService.getThemesSortedByRating(page, size)
+                    : themeService.getAllThemes(page, size);
+            return ResponseEntity.ok(themes);
+        }
+    }
 
 
 

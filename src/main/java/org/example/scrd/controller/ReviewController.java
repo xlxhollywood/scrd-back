@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.example.scrd.controller.response.ApiResponse;
 import org.example.scrd.domain.Theme;
 import org.example.scrd.domain.User;
-import org.example.scrd.dto.ReviewDto;
+import org.example.scrd.dto.MyReviewResponseDto;
+import org.example.scrd.dto.ReviewCreateRequestDto;
+import org.example.scrd.dto.ThemeReviewResponseDto;
 import org.example.scrd.dto.request.ReviewRequest;
 import org.example.scrd.service.ReviewService;
 import org.example.scrd.service.ThemeService;
@@ -21,7 +23,7 @@ public class ReviewController {
     private final ThemeService themeService;
 
     /**
-     리뷰 등록 API -> 리스폰스 만들기
+     리뷰 등록 API
      * */
     @PostMapping("/review/{themeId}")
     public ResponseEntity<ApiResponse<Object>> addReview(
@@ -30,7 +32,7 @@ public class ReviewController {
             @AuthenticationPrincipal User user) {
 
         Theme theme = themeService.getThemeById(themeId);
-        reviewService.addReview(ReviewDto.from(request), user.getId(), theme, request.getTagIds());
+        reviewService.addReview(ReviewCreateRequestDto.from(request), user.getId(), theme, request.getTagIds());
         return ResponseEntity.ok(ApiResponse.success());
     }
 
@@ -40,18 +42,18 @@ public class ReviewController {
      * 내가 쓴 리뷰 보기
      * */
     @GetMapping("/review/{userId}")
-    public ResponseEntity<List<ReviewDto>> getReviewsByUser(@PathVariable Long userId) {
-        List<ReviewDto> reviews = reviewService.getReviewListByUser(userId);
-        return ResponseEntity.ok(reviews);
+    public ResponseEntity<List<MyReviewResponseDto>> getReviewsByUser(@PathVariable Long userId) {
+        List<MyReviewResponseDto> myReviews = reviewService.getReviewListByUser(userId);
+        return ResponseEntity.ok(myReviews);
     }
 
     /**
      * 테마의  리뷰 보기
      * */
     @GetMapping("/review/theme/{themeId}")
-    public ResponseEntity<List<ReviewDto>> getReviewsByTheme(@PathVariable Long themeId){
-        List<ReviewDto> reviews = reviewService.getReviewListByTheme(themeId);
-        return ResponseEntity.ok(reviews);
+    public ResponseEntity<List<ThemeReviewResponseDto>> getReviewsByTheme(@PathVariable Long themeId){
+        List<ThemeReviewResponseDto> themeReviews = reviewService.getReviewListByTheme(themeId);
+        return ResponseEntity.ok(themeReviews);
     }
 
     @DeleteMapping("/review/{id}")
