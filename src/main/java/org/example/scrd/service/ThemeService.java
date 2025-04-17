@@ -120,13 +120,12 @@ public class ThemeService {
     }
 
 
-    public List<MobileThemeDto> getThemesWithAvailableTime(int page, int size) {
+    public List<MobileThemeDto> getThemesWithAvailableTime(int page, int size, LocalDate date) {
         List<Theme> themes = themeRepository.findThemesOrderByReviewCountAndRating(page, size);
+        String dateString = date.toString();
+
         return themes.stream().map(theme -> {
-            // 오늘 날짜 기준 예약 가능 시간 조회
-            String today = LocalDate.now().toString();
-            System.out.println("오늘 날짜 : " + today);
-            List<String> times = themeMongoRepository.findByThemeIdAndDate(theme.getId().intValue(), today)
+            List<String> times = themeMongoRepository.findByThemeIdAndDate(theme.getId().intValue(), dateString)
                     .map(ThemeDocument::getAvailableTimes)
                     .orElse(Collections.emptyList());
             return MobileThemeDto.from(theme, times);

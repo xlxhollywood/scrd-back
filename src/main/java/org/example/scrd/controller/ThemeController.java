@@ -6,11 +6,13 @@ import org.example.scrd.dto.ThemeDto;
 import org.example.scrd.dto.request.ThemeRequest;
 import org.example.scrd.dto.response.ThemeAvailableTimeResponse;
 import org.example.scrd.service.ThemeService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
 
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -141,10 +143,13 @@ public class ThemeController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
             @RequestParam(required = false) String sort,
-            @RequestParam(defaultValue = "web") String platform // "web" or "mobile"
+            @RequestParam(defaultValue = "web") String platform,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
     ) {
+        LocalDate targetDate = (date != null) ? date : LocalDate.now();
+
         if ("mobile".equalsIgnoreCase(platform)) {
-            List<MobileThemeDto> mobileThemes = themeService.getThemesWithAvailableTime(page, size);
+            List<MobileThemeDto> mobileThemes = themeService.getThemesWithAvailableTime(page, size, targetDate);
             return ResponseEntity.ok(mobileThemes);
         } else {
             List<ThemeDto> themes = "rating".equalsIgnoreCase(sort)
