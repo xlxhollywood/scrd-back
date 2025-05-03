@@ -3,9 +3,14 @@ package org.example.scrd.service;
 import lombok.RequiredArgsConstructor;
 import org.example.scrd.domain.*;
 import org.example.scrd.dto.PartyJoinDto;
+import org.example.scrd.dto.PartyPostDetailDto;
+import org.example.scrd.dto.PartyPostDto;
 import org.example.scrd.dto.request.PartyPostRequest;
 import org.example.scrd.exception.NotFoundException;
 import org.example.scrd.repo.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -185,6 +190,20 @@ public class PartyService {
         // 2) 파티 글 삭제 (DB에서 물리 삭제)
         postRepository.delete(post);
     }
+
+    public List<PartyPostDto> getPartyPostsPaged(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "regDate"));
+        return postRepository.findAll(pageable)
+                .map(PartyPostDto::from)  // 또는 PartyPost → PartyJoinDto 변환
+                .getContent();
+    }
+
+    public PartyPostDetailDto getPartyPostDetail(Long postId) {
+        PartyPost post = postRepository.findById(postId)
+                .orElseThrow(() -> new NotFoundException("일행 글 없음"));
+        return PartyPostDetailDto.from(post);
+    }
+
 
 
 }

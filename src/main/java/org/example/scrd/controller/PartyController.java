@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.scrd.controller.response.ApiResponse;
 import org.example.scrd.domain.User;
 import org.example.scrd.dto.PartyJoinDto;
+import org.example.scrd.dto.PartyPostDetailDto;
+import org.example.scrd.dto.PartyPostDto;
 import org.example.scrd.dto.request.PartyJoinRequest;
 import org.example.scrd.dto.request.PartyPostRequest;
 import org.example.scrd.service.PartyService;
@@ -22,7 +24,22 @@ public class PartyController {
 
     private final PartyService partyService;
 
-    //TODO : 일행 post GET mapping 필요함
+    //TODO : 일행 GET mapping 필요함
+    // 전체 일행 모집 글을 페이징 기반으로 조회
+    @GetMapping("/paged")
+    public ResponseEntity<ApiResponse<List<PartyPostDto>>> getPartyPostsPaged(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+
+        List<PartyPostDto> posts = partyService.getPartyPostsPaged(page, size);
+        return ResponseEntity.ok(ApiResponse.success(posts));
+    }
+
+    @GetMapping("/{postId}")
+    public ResponseEntity<ApiResponse<PartyPostDetailDto>> getPartyPostDetail(@PathVariable Long postId) {
+        PartyPostDetailDto dto = partyService.getPartyPostDetail(postId);
+        return ResponseEntity.ok(ApiResponse.success(dto));
+    }
 
 
 
