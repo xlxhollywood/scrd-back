@@ -6,7 +6,9 @@ import org.example.scrd.dto.PartyJoinDto;
 import org.example.scrd.dto.PartyPostDetailDto;
 import org.example.scrd.dto.PartyPostDto;
 import org.example.scrd.dto.request.PartyPostRequest;
+import org.example.scrd.exception.AlreadyJoinedException;
 import org.example.scrd.exception.NotFoundException;
+import org.example.scrd.exception.PartyClosedException;
 import org.example.scrd.repo.*;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -61,11 +63,11 @@ public class PartyService {
 //        }
 
         if (partyPost.isClosed() || partyPost.getCurrentParticipants() >= partyPost.getMaxParticipants()) {
-            throw new IllegalStateException("모집이 마감된 파티입니다.");
+            throw new PartyClosedException();
         }
 
         if (joinRepository.findByPartyPostIdAndUserId(postId, userId).isPresent()) {
-            throw new IllegalStateException("이미 신청함");
+            throw new AlreadyJoinedException();
         }
 
         PartyJoin partyJoin = PartyJoin.builder()
