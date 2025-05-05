@@ -62,7 +62,7 @@ public class PartyController {
         return ResponseEntity.ok(ApiResponse.success());
     }
 
-    // 파티 참여 신청을 승인 / 거절 처리하는 API를 위한 전체 구성입니다. 파티장입장에서 수락 혹은 거절
+    // 파티 참여 신청을 승인 / 거절 처리하는 API를 위한 전체 구성입니다. 파티장 입장에서 수락 혹은 거절
     @PostMapping("/join/{joinId}/status")
     public ResponseEntity<ApiResponse<Object>> updateJoinStatus(
             @PathVariable Long joinId,
@@ -71,13 +71,20 @@ public class PartyController {
         return ResponseEntity.ok(ApiResponse.success());
     }
 
+   // 알림 창에서 파티 참여 글을 확인하는 ** API 일행 신청자들 목록 확인 (PENDING만 필터링)
+//    @GetMapping("/{postId}/joins")
+//    public ResponseEntity<ApiResponse<List<PartyJoinDto>>> getJoinRequests(
+//            @PathVariable Long postId,
+//            @RequestParam(required = false) String status) {
+//        List<PartyJoinDto> joins = partyService.getJoinRequests(postId, status);
+//        return ResponseEntity.ok(ApiResponse.success(joins));
+//    }
+
     // 알림 창에서 파티 참여 글을 확인하는 ** API 일행 신청자들 목록 확인 (PENDING만 필터링)
-    @GetMapping("/{postId}/joins")
-    public ResponseEntity<ApiResponse<List<PartyJoinDto>>> getJoinRequests(
-            @PathVariable Long postId,
-            @RequestParam(required = false) String status) {
-        System.out.println("DELETE method");
-        List<PartyJoinDto> joins = partyService.getJoinRequests(postId, status);
+    @GetMapping("/join/notification")
+    public ResponseEntity<ApiResponse<List<PartyJoinDto>>> getJoinRequestsByWriter(
+            @AuthenticationPrincipal User user) {
+        List<PartyJoinDto> joins = partyService.getJoinRequestsByWriter(user.getId());
         return ResponseEntity.ok(ApiResponse.success(joins));
     }
 

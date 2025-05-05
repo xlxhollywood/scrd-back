@@ -19,6 +19,7 @@ public class NotificationController {
 
     private final SseEmitterService sseEmitterService;
     private final JwtUtil jwtUtil;
+
     @Value("${custom.jwt.secret}") // application properties에서 JWT 비밀키를 주입받음
     private String SECRET_KEY;
 

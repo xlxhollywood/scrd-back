@@ -139,23 +139,23 @@ public class PartyService {
     }
 
 
-    @Transactional(readOnly = true)
-    public List<PartyJoinDto> getJoinRequests(Long postId, String status) {
-        PartyPost post = postRepository.findById(postId)
-                .orElseThrow(() -> new NotFoundException("모집글 없음"));
-
-        List<PartyJoin> joins;
-        if (status != null) {
-            PartyJoin.JoinStatus joinStatus = PartyJoin.JoinStatus.valueOf(status.toUpperCase());
-            joins = joinRepository.findByPartyPostAndStatus(post, joinStatus);
-        } else {
-            joins = joinRepository.findByPartyPost(post);
-        }
-
-        return joins.stream()
-                .map(join -> PartyJoinDto.from(join))
-                .collect(Collectors.toList());
-    }
+//    @Transactional(readOnly = true)
+//    public List<PartyJoinDto> getJoinRequests(Long postId, String status) {
+//        PartyPost post = postRepository.findById(postId)
+//                .orElseThrow(() -> new NotFoundException("모집글 없음"));
+//
+//        List<PartyJoin> joins;
+//        if (status != null) {
+//            PartyJoin.JoinStatus joinStatus = PartyJoin.JoinStatus.valueOf(status.toUpperCase());
+//            joins = joinRepository.findByPartyPostAndStatus(post, joinStatus);
+//        } else {
+//            joins = joinRepository.findByPartyPost(post);
+//        }
+//
+//        return joins.stream()
+//                .map(join -> PartyJoinDto.from(join))
+//                .collect(Collectors.toList());
+//    }
 
     @Transactional
     public void cancelJoin(Long postId, Long userId) {
@@ -204,6 +204,14 @@ public class PartyService {
         return PartyPostDetailDto.from(post);
     }
 
+
+    @Transactional(readOnly = true)
+    public List<PartyJoinDto> getJoinRequestsByWriter(Long writerId) {
+        List<PartyJoin> joins = joinRepository.findAllByWriterId(writerId);
+        return joins.stream()
+                .map(PartyJoinDto::from)
+                .collect(Collectors.toList());
+    }
 
 
 }
