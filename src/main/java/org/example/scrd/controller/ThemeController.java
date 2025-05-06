@@ -1,6 +1,7 @@
 package org.example.scrd.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.scrd.dto.LocationCountDto;
 import org.example.scrd.dto.MobileThemeDto;
 import org.example.scrd.dto.ThemeDto;
 import org.example.scrd.dto.request.ThemeRequest;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/scrd/api")
@@ -159,6 +161,10 @@ public class ThemeController {
         }
     }
 
+    @GetMapping("theme/location-counts")
+    public ResponseEntity<Map<String, Object>> getLocationCounts() {
+        return ResponseEntity.ok(themeService.getLocationCountsWithTotal());
+    }
 
 
 }

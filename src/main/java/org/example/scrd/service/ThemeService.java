@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.scrd.domain.Theme;
 import org.example.scrd.domain.ThemeDocument;
+import org.example.scrd.dto.LocationCountDto;
 import org.example.scrd.dto.MobileThemeDto;
 import org.example.scrd.dto.ThemeDto;
 import org.example.scrd.exception.NotFoundException;
@@ -16,9 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -130,6 +129,20 @@ public class ThemeService {
                     .orElse(Collections.emptyList());
             return MobileThemeDto.from(theme, times);
         }).collect(Collectors.toList());
+    }
+
+
+    public Map<String, Object> getLocationCountsWithTotal() {
+        List<LocationCountDto> counts = themeRepository.countThemesByLocation();
+        int total = counts.stream()
+                .mapToInt(c -> c.getCount().intValue())
+                .sum();
+
+
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("total", total);
+        result.put("counts", counts);
+        return result;
     }
 
 

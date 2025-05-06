@@ -1,6 +1,7 @@
 package org.example.scrd.repo;
 
 import org.example.scrd.domain.Theme;
+import org.example.scrd.dto.LocationCountDto;
 import org.example.scrd.dto.ThemeDto;
 
 import java.util.List;
@@ -19,5 +20,8 @@ public interface ThemeRepositoryCustom {
             Float ratingMax,
             String location
     );
+
+    List<LocationCountDto> countThemesByLocation();
+
 
 }
