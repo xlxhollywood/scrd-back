@@ -145,5 +145,20 @@ public class ThemeService {
         return result;
     }
 
+    public List<MobileThemeDto> searchThemesWithFilters(
+            String keyword, Integer horror, Integer activity, String location, LocalDate date) {
+
+        List<Theme> themes = themeRepository.searchByKeywordAndFilters(keyword, horror, activity, location);
+        String dateString = date.toString();
+
+        return themes.stream().map(theme -> {
+            List<String> times = themeMongoRepository.findByThemeIdAndDate(theme.getId().intValue(), dateString)
+                    .map(ThemeDocument::getAvailableTimes)
+                    .orElse(Collections.emptyList());
+            return MobileThemeDto.from(theme, times);
+        }).collect(Collectors.toList());
+    }
+
+
 
 }

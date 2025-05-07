@@ -118,4 +118,37 @@ public class ThemeRepositoryCustomImpl implements ThemeRepositoryCustom {
                 .fetch();
     }
 
+    @Override
+    public List<Theme> searchByKeywordAndFilters(
+            String keyword, Integer horror, Integer activity, String location) {
+
+        QTheme theme = QTheme.theme;
+        BooleanBuilder builder = new BooleanBuilder();
+        // 키워드를 어느 것으로 쓸 것인가.. 제목 혹은 브랜드 혹은 지역에 있는 키워드를 포함하면 검색됨.
+        if (keyword != null && !keyword.isEmpty()) {
+            builder.and(theme.title.containsIgnoreCase(keyword)
+                    .or(theme.brand.containsIgnoreCase(keyword))
+                    .or(theme.location.containsIgnoreCase(keyword)));
+        }
+
+        if (horror != null) {
+            builder.and(theme.horror.eq(horror));
+        }
+
+        if (activity != null) {
+            builder.and(theme.activity.eq(activity));
+        }
+
+        if (location != null && !location.isEmpty()) {
+            builder.and(theme.location.eq(location));
+        }
+
+        return queryFactory
+                .selectFrom(theme)
+                .where(builder)
+                .orderBy(theme.rating.desc().nullsLast())
+                .fetch();
+    }
+
+
 }

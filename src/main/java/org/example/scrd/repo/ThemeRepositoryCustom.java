@@ -23,5 +23,8 @@ public interface ThemeRepositoryCustom {
 
     List<LocationCountDto> countThemesByLocation();
 
+    List<Theme> searchByKeywordAndFilters(String keyword, Integer horror, Integer activity, String location);
+
+
 
 }

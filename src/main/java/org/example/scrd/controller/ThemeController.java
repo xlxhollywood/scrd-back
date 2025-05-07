@@ -166,5 +166,21 @@ public class ThemeController {
         return ResponseEntity.ok(themeService.getLocationCountsWithTotal());
     }
 
+    @GetMapping("/theme/search/filtered")
+    public ResponseEntity<List<MobileThemeDto>> searchThemesWithFilters(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam(required = false) Integer horror,
+            @RequestParam(required = false) Integer activity,
+            @RequestParam(required = false) String location
+    ) {
+        LocalDate targetDate = (date != null) ? date : LocalDate.now();
+        List<MobileThemeDto> results = themeService.searchThemesWithFilters(
+                keyword, horror, activity, location, targetDate);
+        return ResponseEntity.ok(results);
+    }
+
+
+
 
 }
