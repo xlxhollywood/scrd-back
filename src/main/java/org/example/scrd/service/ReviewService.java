@@ -105,6 +105,9 @@ public class ReviewService {
         themeRepository.save(theme);
     }
 
+    public long countReviewsByUser(Long userId) {
+        return reviewRepository.countByUserId(userId);
+    }
 
 
 }

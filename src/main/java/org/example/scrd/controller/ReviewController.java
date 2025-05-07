@@ -65,6 +65,13 @@ public class ReviewController {
     }
 
 
+    @GetMapping("/review/count")
+    public ResponseEntity<ApiResponse<Long>> countReviewsByAuthenticatedUser(
+            @AuthenticationPrincipal User user) {
+        long reviewCount = reviewService.countReviewsByUser(user.getId());
+        return ResponseEntity.ok(ApiResponse.success(reviewCount));
+    }
+
 
 }
 
