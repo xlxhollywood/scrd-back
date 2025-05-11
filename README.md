@@ -3,7 +3,7 @@
 > **웹 스크래핑을 활용한 방탈출 예약/리뷰/동행 통합 플랫폼 - 백엔드 레포지토리**
 
 - **기간**: 2024.12.01 ~ 2025.04.20 (총 5개월)
-- **시연 영상**: [YouTube 링크](https://drive.google.com/drive/folders/1C0baog9rQ4LC-XmpKbN3uXVEPXcWIz9O)
+- [📽 시연 영상 전체 보기 (Google Drive)](https://drive.google.com/drive/folders/1C0baog9rQ4LC-XmpKbN3uXVEPXcWIz9O)
 
 —
 
@@ -72,20 +72,17 @@
 
 ## 👥 팀 구성 및 역할
 
-| 이름 | 역할 |
-|———|———|
-| 오세훈 | 기획, 백엔드, 인프라, 프론트엔드, 디자인(UI) |
-| 김은진 | 디자인 협업 |
-| 임성빈 | 프론트엔드 협업 |
-| 김경진 | 데이터 마이닝 |
-| 이민규 | 모바일 앱 개발 |
+오세훈: 기획, 백엔드, 인프라, 프론트엔드, 디자인(UI)
+
+김은진: 디자인 협업
+
+임성빈: 프론트엔드 협업
+
+김경진: 데이터 마이닝
+
+이민규: 모바일 앱 개발
 
 > 프로젝트 전반의 아키텍처 및 기능 개발을 주도했으며, **백엔드 전 영역, 배포, CI/CD, 인증 시스템, 실시간 알림, Mongo 기반 예약 관리까지 100% 기여**
-
-—
-
-## 🔗 프로젝트 시연 링크
-[📽 시연 영상 전체 보기 (Google Drive)](https://drive.google.com/drive/folders/1C0baog9rQ4LC-XmpKbN3uXVEPXcWIz9O)
 
 —
 
