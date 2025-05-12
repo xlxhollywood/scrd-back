@@ -41,7 +41,7 @@ public class ReviewController {
     /**
      * 내가 쓴 리뷰 보기
      * */
-    @GetMapping("/review")
+    @GetMapping("/review/my")
     public ResponseEntity<List<MyReviewResponseDto>> getReviewsByUser(@AuthenticationPrincipal User user) {
         List<MyReviewResponseDto> myReviews = reviewService.getReviewListByUser(user.getId());
         return ResponseEntity.ok(myReviews);
