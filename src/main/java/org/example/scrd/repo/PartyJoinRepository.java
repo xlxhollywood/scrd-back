@@ -2,6 +2,7 @@ package org.example.scrd.repo;
 
 import org.example.scrd.domain.PartyJoin;
 import org.example.scrd.domain.PartyPost;
+import org.example.scrd.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,6 +20,7 @@ public interface PartyJoinRepository extends JpaRepository<PartyJoin, Long> {
     List<PartyJoin> findByPartyPost(PartyPost post);
     List<PartyJoin> findByPartyPostAndStatus(PartyPost post, PartyJoin.JoinStatus status);
 
+    Optional<PartyJoin> findByPartyPostAndUser(PartyPost partyPost,User user);
     @Query("SELECT j FROM PartyJoin j JOIN FETCH j.partyPost p WHERE p.writer.id = :writerId")
     List<PartyJoin> findAllByWriterId(@Param("writerId") Long writerId);
 

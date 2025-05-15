@@ -11,6 +11,7 @@ import org.example.scrd.dto.request.ReviewRequest;
 import org.example.scrd.service.ReviewService;
 import org.example.scrd.service.ThemeService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -56,7 +57,7 @@ public class ReviewController {
         return ResponseEntity.ok(themeReviews);
     }
 
-    @DeleteMapping("/review/{id}")
+    @DeleteMapping("/review/{reviewId}")
     public ResponseEntity<ApiResponse<Object>> deleteReview(
             @PathVariable Long id,
             @AuthenticationPrincipal User user) {

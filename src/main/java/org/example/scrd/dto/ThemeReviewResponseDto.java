@@ -5,12 +5,14 @@ import lombok.Builder;
 import lombok.Getter;
 import org.example.scrd.domain.Review;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
 @Getter
 @AllArgsConstructor
 public class ThemeReviewResponseDto {
+    private Long userId;
     private String userTier;
     private String nickName;
     private Long id;
@@ -19,6 +21,7 @@ public class ThemeReviewResponseDto {
     private int stars;
     private int horror;
     private int activity;
+    private LocalDateTime regDate;
     private List<String> tagNames; // 태그 이름 리스트 추가
 
 // 리뷰 가져오기용 Dto
@@ -28,6 +31,7 @@ public static ThemeReviewResponseDto from(Review review) {
             .toList();
 
     return ThemeReviewResponseDto.builder()
+            .userId(review.getUser().getId())
             .userTier(review.getUser().getTier().getTierE()) // <- 여기 수정
             .nickName(review.getUser().getNickName())
             .id(review.getId())
@@ -37,6 +41,7 @@ public static ThemeReviewResponseDto from(Review review) {
             .horror(review.getHorror())
             .activity(review.getActivity())
             .tagNames(tagNames)
+            .regDate(review.getRegDate())
             .build();
     }
 }

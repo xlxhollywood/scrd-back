@@ -2,13 +2,12 @@ version: '3.8'
 
 services:
   backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ohsehun/spring-backend:latest
     container_name: spring-backend
     restart: always
     networks:
-      - app-network
+    - app-network
+
 
   redis:
     image: redis:alpine

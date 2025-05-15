@@ -141,24 +141,6 @@ public class PartyService {
     }
 
 
-//    @Transactional(readOnly = true)
-//    public List<PartyJoinDto> getJoinRequests(Long postId, String status) {
-//        PartyPost post = postRepository.findById(postId)
-//                .orElseThrow(() -> new NotFoundException("모집글 없음"));
-//
-//        List<PartyJoin> joins;
-//        if (status != null) {
-//            PartyJoin.JoinStatus joinStatus = PartyJoin.JoinStatus.valueOf(status.toUpperCase());
-//            joins = joinRepository.findByPartyPostAndStatus(post, joinStatus);
-//        } else {
-//            joins = joinRepository.findByPartyPost(post);
-//        }
-//
-//        return joins.stream()
-//                .map(join -> PartyJoinDto.from(join))
-//                .collect(Collectors.toList());
-//    }
-
     @Transactional
     public void cancelJoin(Long postId, Long userId) {
         // 1) PartyJoin 찾기
@@ -178,18 +160,18 @@ public class PartyService {
     }
 
     @Transactional
-    public void deletePartyPost(Long postId, Long userId) {
+    public void deletePartyPost(Long postId, User user) {
         PartyPost post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException("파티 글 없음"));
 
-        // 1) 작성자인지 권한 확인
-        if (!post.getWriter().getId().equals(userId)) {
+        boolean isAdmin = user.getRole() == Role.ROLE_ADMIN;
+        boolean isAuthor = post.getWriter().getId().equals(user.getId());
+
+        if (!isAuthor && !isAdmin){
             throw new IllegalStateException("본인이 작성한 글만 삭제할 수 있습니다.");
         }
 
         notificationRepository.deleteByRelatedPostId(postId);
-
-        // 2) 파티 글 삭제 (DB에서 물리 삭제)
         postRepository.delete(post);
     }
 
@@ -200,11 +182,17 @@ public class PartyService {
                 .getContent();
     }
 
-    public PartyPostDetailDto getPartyPostDetail(Long postId) {
+    public PartyPostDetailDto getPartyPostDetail(Long postId, User user) {
         PartyPost post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException("일행 글 없음"));
-        return PartyPostDetailDto.from(post);
+
+        // 신청 상태 조회
+        PartyJoin join = joinRepository.findByPartyPostAndUser(post, user).orElse(null);
+        String status = (join != null) ? join.getStatus().name() : null;
+
+        return PartyPostDetailDto.from(post, status);
     }
+
 
 
     @Transactional(readOnly = true)

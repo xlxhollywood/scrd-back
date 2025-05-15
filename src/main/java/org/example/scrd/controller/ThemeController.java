@@ -97,24 +97,6 @@ public class ThemeController {
         return ResponseEntity.ok(themes);
     }
 
-//    @GetMapping("/theme/paged")
-//    public ResponseEntity<List<ThemeDto>> getThemesPaged(
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "20") int size,
-//            @RequestParam(required = false) String sort
-//    ) {
-//        List<ThemeDto> themes;
-//        if ("rating".equalsIgnoreCase(sort)) {
-//            themes = themeService.getThemesSortedByRating(page, size);
-//        } else {
-//            themes = themeService.getAllThemes(page, size);
-//        }
-//
-//        return ResponseEntity.ok(themes);
-//    }
-
-
-
 
     /**
      * 필터 조건 기반 테마 조회 API
@@ -130,8 +112,6 @@ public class ThemeController {
             @RequestParam(required = false, name = "ratingMax") Float maxRating,
             @RequestParam(required = false, name = "location") String location
     ) {
-        log.info("🎯 [요청 파라미터] horror={}, activity={}, minLevel={}, maxLevel={}, minRating={}, maxRating={}, location={}",
-                horror, activity, minLevel, maxLevel, minRating, maxRating, location);
 
         List<ThemeDto> themes = themeService.filterThemes(
                 horror, activity, minLevel, maxLevel, minRating, maxRating, location

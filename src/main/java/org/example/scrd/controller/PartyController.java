@@ -9,10 +9,10 @@ import org.example.scrd.dto.PartyPostDto;
 import org.example.scrd.dto.request.PartyJoinRequest;
 import org.example.scrd.dto.request.PartyPostRequest;
 import org.example.scrd.service.PartyService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
@@ -36,12 +36,12 @@ public class PartyController {
     }
 
     @GetMapping("/{postId}")
-    public ResponseEntity<ApiResponse<PartyPostDetailDto>> getPartyPostDetail(@PathVariable Long postId) {
-        PartyPostDetailDto dto = partyService.getPartyPostDetail(postId);
+    public ResponseEntity<ApiResponse<PartyPostDetailDto>> getPartyPostDetail(
+            @PathVariable Long postId,
+            @AuthenticationPrincipal User user){
+        PartyPostDetailDto dto = partyService.getPartyPostDetail(postId, user);
         return ResponseEntity.ok(ApiResponse.success(dto));
     }
-
-
 
 
     @PostMapping("/{themeId}")
@@ -71,14 +71,6 @@ public class PartyController {
         return ResponseEntity.ok(ApiResponse.success());
     }
 
-   // 알림 창에서 파티 참여 글을 확인하는 ** API 일행 신청자들 목록 확인 (PENDING만 필터링)
-//    @GetMapping("/{postId}/joins")
-//    public ResponseEntity<ApiResponse<List<PartyJoinDto>>> getJoinRequests(
-//            @PathVariable Long postId,
-//            @RequestParam(required = false) String status) {
-//        List<PartyJoinDto> joins = partyService.getJoinRequests(postId, status);
-//        return ResponseEntity.ok(ApiResponse.success(joins));
-//    }
 
     // 알림 창에서 파티 참여 글을 확인하는 ** API 일행 신청자들 목록 확인 (PENDING만 필터링)
     @GetMapping("/join/notification")
@@ -88,18 +80,15 @@ public class PartyController {
         return ResponseEntity.ok(ApiResponse.success(joins));
     }
 
-
-    // 일행 모집 글 삭제
     @DeleteMapping("/{postId}")
     public ResponseEntity<ApiResponse<Object>> deletePartyPost(
             @PathVariable Long postId,
             @AuthenticationPrincipal User user
     ) {
-        partyService.deletePartyPost(postId, user.getId());
+        partyService.deletePartyPost(postId, user); // ✅ 그냥 user 전체 넘기는 것도 깔끔
         return ResponseEntity.ok(ApiResponse.success());
     }
 
-    //TODO : 신청한 요청을 취소
     @DeleteMapping("/{postId}/join")
     public ResponseEntity<ApiResponse<Object>> cancelJoin(
             @PathVariable Long postId,

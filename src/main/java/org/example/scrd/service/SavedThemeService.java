@@ -4,16 +4,18 @@ import lombok.RequiredArgsConstructor;
 import org.example.scrd.domain.SavedTheme;
 import org.example.scrd.domain.Theme;
 import org.example.scrd.domain.User;
+import org.example.scrd.dto.MobileThemeDto;
 import org.example.scrd.dto.response.SavedThemeListResponse;
 import org.example.scrd.dto.response.SavedThemeResponse;
 import org.example.scrd.exception.NotFoundException;
-import org.example.scrd.repo.ReviewRepository;
-import org.example.scrd.repo.SavedThemeRepository;
-import org.example.scrd.repo.ThemeRepository;
-import org.example.scrd.repo.UserRepository;
+import org.example.scrd.repo.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.example.scrd.domain.ThemeDocument;
 
+
+import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -22,6 +24,7 @@ public class SavedThemeService {
     private final SavedThemeRepository savedThemeRepository;
     private final UserRepository userRepository;
     private final ThemeRepository themeRepository;
+    private final ThemeMongoRepository themeMongoRepository;
 
     @Transactional
     public SavedThemeResponse savedUserTheme(Long themeId, Long userId){
@@ -56,4 +59,28 @@ public class SavedThemeService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    public List<MobileThemeDto> getSavedThemesWithAvailableTimes(Long userId, LocalDate date) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("유저 없음"));
+
+        List<SavedTheme> savedThemes = savedThemeRepository.findByUser(user);
+        String dateString = date.toString();
+
+        return savedThemes.stream()
+                .map(savedTheme -> {
+                    Theme theme = savedTheme.getTheme();
+
+                    List<String> availableTimes = themeMongoRepository
+                            .findByThemeIdAndDate(theme.getId().intValue(), dateString)
+                            .map(ThemeDocument::getAvailableTimes)
+                            .orElse(Collections.emptyList());
+
+                    return MobileThemeDto.from(theme, availableTimes);
+                })
+                .toList();
+    }
+
+
 }
+

@@ -39,7 +39,10 @@ public class PartyPostDetailDto {
     private String branch;
     private String brand;
 
-    public static PartyPostDetailDto from(PartyPost post) {
+    // 유저가 이미 참여한 테마인지 아닌지 알기 위한 필드
+    private String joinStatus;
+
+    public static PartyPostDetailDto from(PartyPost post, String joinStatus) {
         Theme theme = post.getTheme();
         User writer = post.getWriter();
 
@@ -67,6 +70,8 @@ public class PartyPostDetailDto {
                 .location(theme.getLocation())
                 .branch(theme.getBranch())
                 .brand(theme.getBrand())
+
+                .joinStatus(joinStatus)
                 .build();
     }
 }

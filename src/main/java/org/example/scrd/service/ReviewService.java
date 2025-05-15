@@ -78,10 +78,10 @@ public class ReviewService {
             throw new UnauthorizedAccessException();
         }
 
-        // ✅ 리뷰-태그 연결 삭제
+        // 리뷰-태그 연결 삭제
         reviewTagMapRepository.deleteAllByReview(review);
 
-        // ✅ 테마의 리뷰 카운트 감소
+        // 테마의 리뷰 카운트 감소
         Theme theme = review.getTheme();
         reviewRepository.delete(review);
 

@@ -22,16 +22,7 @@ public class UserService {
         return UserResponse.from(user);
     }
 
-//    @Transactional
-//    public void delete(Long userId){
-//        userRepository.deleteById(userId);
-//
-//        String redisKey = "refreshToken:" + userId;
-//        System.out.println("redisKey : " + redisKey);
-//        redisTemplate.delete(redisKey);
-//        System.out.println("사용자 탈퇴 완료!");
-//    }
-
+    @Transactional
     public void deleteUser(User currentUser, Long targetUserId) {
         // 관리자이거나 본인일 경우에만 삭제 허용
         boolean isAdmin = currentUser.getRole() == Role.ROLE_ADMIN;

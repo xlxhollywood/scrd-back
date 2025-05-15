@@ -14,7 +14,6 @@ public class SseEmitterService {
     private final Map<Long, SseEmitter> emitters = new ConcurrentHashMap<>();
 
     public SseEmitter subscribe(Long userId) {
-        // 타임아웃 없이 or 긴 타임아웃
         SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
         emitters.put(userId, emitter);
 
@@ -22,8 +21,16 @@ public class SseEmitterService {
         emitter.onTimeout(() -> emitters.remove(userId));
         emitter.onError((e) -> emitters.remove(userId));
 
+        try {
+            // 최초 연결 시 간단한 ping 또는 연결 확인 전송 (중요)
+            emitter.send(SseEmitter.event().name("connect").data("connected"));
+        } catch (IOException e) {
+            emitters.remove(userId);
+        }
+
         return emitter;
     }
+
 
     // 실제 알림 전송
     public void sendNotification(Long userId, String message) {

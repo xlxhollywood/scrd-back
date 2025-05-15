@@ -3,6 +3,8 @@ package org.example.scrd.dto.response;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 @Builder
 public class SavedThemeListResponse {
@@ -12,4 +14,5 @@ public class SavedThemeListResponse {
     private String image;
     private String brand;
     private String branch;
+    private List<String> availableTimes;
 }
