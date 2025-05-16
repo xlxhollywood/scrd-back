@@ -20,6 +20,7 @@ public class MyReviewResponseDto {
     private List<String> tagNames; // 태그 이름 리스트 추가
 
     private String themeTitle;
+    private String themeBrand;
     private String themeBranch;
     private String themeLocation;
     private String themeImage;
@@ -44,6 +45,7 @@ public class MyReviewResponseDto {
                 .tagNames(tagNames)
 
                 // 🔽 추가된 부분
+                .themeBrand(theme.getBrand())
                 .themeTitle(theme.getTitle())
                 .themeBranch(theme.getBranch())
                 .themeLocation(theme.getLocation())
