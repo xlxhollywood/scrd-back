@@ -11,6 +11,7 @@ import java.util.List;
 @Builder
 public class PartyCommentResponse {
     private Long id;
+    private Long writerId;
     private String content;
     private String writerName;
     private Long parentId;
@@ -21,6 +22,7 @@ public class PartyCommentResponse {
         return PartyCommentResponse.builder()
                 .id(comment.getId())
                 .content(comment.getContent())
+                .writerId(comment.getWriter().getId())
                 .writerName(comment.getWriter().getNickName())
                 .parentId(comment.getParent() != null ? comment.getParent().getId() : null)
                 .regDate(comment.getRegDate())
