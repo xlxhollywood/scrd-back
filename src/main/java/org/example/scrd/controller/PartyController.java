@@ -9,11 +9,13 @@ import org.example.scrd.dto.PartyPostDto;
 import org.example.scrd.dto.request.PartyJoinRequest;
 import org.example.scrd.dto.request.PartyPostRequest;
 import org.example.scrd.service.PartyService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -29,11 +31,14 @@ public class PartyController {
     @GetMapping("/paged")
     public ResponseEntity<ApiResponse<List<PartyPostDto>>> getPartyPostsPaged(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size) {
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate deadline,
+            @RequestParam(required = false) Boolean isClosed) {
 
-        List<PartyPostDto> posts = partyService.getPartyPostsPaged(page, size);
+        List<PartyPostDto> posts = partyService.getPartyPostsPaged(page, size, deadline, isClosed);
         return ResponseEntity.ok(ApiResponse.success(posts));
     }
+
 
     @GetMapping("/{postId}")
     public ResponseEntity<ApiResponse<PartyPostDetailDto>> getPartyPostDetail(

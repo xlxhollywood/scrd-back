@@ -59,9 +59,9 @@ public class ReviewController {
 
     @DeleteMapping("/review/{reviewId}")
     public ResponseEntity<ApiResponse<Object>> deleteReview(
-            @PathVariable Long id,
+            @PathVariable Long reviewId,
             @AuthenticationPrincipal User user) {
-        reviewService.deleteReview(id, user);
+        reviewService.deleteReview(reviewId, user);
         return ResponseEntity.ok(ApiResponse.success());
     }
 

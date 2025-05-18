@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -175,11 +176,12 @@ public class PartyService {
         postRepository.delete(post);
     }
 
-    public List<PartyPostDto> getPartyPostsPaged(int page, int size) {
+    public List<PartyPostDto> getPartyPostsPaged(int page, int size, LocalDate deadline, Boolean isClosed) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "regDate"));
-        return postRepository.findAll(pageable)
-                .map(PartyPostDto::from)  // 또는 PartyPost → PartyJoinDto 변환
-                .getContent();
+        return postRepository.findByConditions(deadline, isClosed, pageable)
+                .stream()
+                .map(PartyPostDto::from)
+                .collect(Collectors.toList());
     }
 
     public PartyPostDetailDto getPartyPostDetail(Long postId, User user) {
