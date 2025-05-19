@@ -8,9 +8,9 @@
 - **기간**: 2024.10.23 ~ 2025.05.20 (총 5개월)<br>
 - [📱 Google Play에서 SCRD 앱 설치하기](https://play.google.com/store/apps/details?id=com.scrd.scrd)
 - [📽 베타 버전 데모 영상 (Google Drive)](https://drive.google.com/drive/folders/1C0baog9rQ4LC-XmpKbN3uXVEPXcWIz9O)
-  
 
 
+—
 ## 📌 프로젝트 개요
 
 기존 방탈출 카페 예약 시스템의 단편성과 정보 부족 문제를 해결하고자 전국 방탈출 카페의 예약 가능 시간과 테마 정보를 통합 제공하는 웹/모바일 기반 예약 플랫폼을 개발했습니다.
@@ -20,7 +20,7 @@
 - SNS 로그인 및 JWT 인증
 - 실시간 알림 및 유저 레벨/포인트 시스템까지 통합한 **엔드-투-엔드 서비스 플랫폼 구축**
 
-
+—
 
 ## 🧩 주요 기능
 
