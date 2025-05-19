@@ -2,10 +2,14 @@
 
 > **웹 스크래핑을 활용한 방탈출 예약/리뷰/동행 통합 플랫폼 - 백엔드 레포지토리**
 
-- **기간**: 2024.12.01 ~ 2025.04.20 (총 5개월)
-- [📽 시연 영상 전체 보기 (Google Drive)](https://drive.google.com/drive/folders/1C0baog9rQ4LC-XmpKbN3uXVEPXcWIz9O)
 
-—
+[![SCRD 앱 홍보영상](https://img.youtube.com/vi/Qu4Drg5c4mA/0.jpg)](https://www.youtube.com/watch?v=Qu4Drg5c4mA)
+
+- **기간**: 2024.10.23 ~ 2025.05.20 (총 5개월)<br>
+- [📱 Google Play에서 SCRD 앱 설치하기](https://play.google.com/store/apps/details?id=com.scrd.scrd)
+- [📽 베타 버전 데모 영상 (Google Drive)](https://drive.google.com/drive/folders/1C0baog9rQ4LC-XmpKbN3uXVEPXcWIz9O)
+  
+
 
 ## 📌 프로젝트 개요
 
