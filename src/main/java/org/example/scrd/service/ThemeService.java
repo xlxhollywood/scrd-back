@@ -51,15 +51,7 @@ public class ThemeService {
             .map(ThemeDto::toDto)
             .collect(Collectors.toList());
     }
-//    테마 id로 예약 시간대를 불러온다. 하지만 한 테마의 일주일 치 시간대를 볼 필요가 없어서 주석처리하였음..
-//    public List<String> getThemeAvailableTime(Long themeId) {
-//        ThemeDocument document = themeMongoRepository.findByThemeId(themeId.intValue())
-//                .stream()
-//                .findFirst()
-//                .orElseThrow(() -> new RuntimeException("해당 테마의 시간 정보를 찾을 수 없습니다."));
-//
-//        return document.getAvailableTimes();
-//    }
+
 
     public List<String> getAvailableTimesByDate(Long themeId, String date) {
         return themeMongoRepository.findByThemeIdAndDate(themeId.intValue(), date)
@@ -79,56 +71,33 @@ public class ThemeService {
                 .collect(Collectors.toList());
     }
 
-    public List<ThemeDto> getThemesSortedByRating(int page, int size) {
-        return themeRepository.findThemesOrderByReviewCountAndRating(page, size).stream()
-                .map(ThemeDto::toDto)
-                .collect(Collectors.toList());
-    }
-
-    public List<ThemeDto> getAllThemes(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
-        return themeRepository.findAll(pageable)
-                .stream()
-                .map(ThemeDto::toDto)
-                .collect(Collectors.toList());
-    }
-
-
-
-    public List<ThemeDto> filterThemes(
+    public List<MobileThemeDto> getThemesByFilterCriteria(
+            String keyword,
             Integer horror,
             Integer activity,
-            Float minLevel,
-            Float maxLevel,
-            Float minRating,
-            Float maxRating,
-            String location
+            Float levelMin,
+            Float levelMax,
+            String location,
+            LocalDate date,
+            int page,
+            int size,
+            String sort
     ) {
-        log.info("🔍 [ThemeService] 필터링 실행: horror={}, activity={}, minLevel={}, maxLevel={}, minRating={}, maxRating={}, location={}",
-                horror, activity, minLevel, maxLevel, minRating, maxRating, location);
 
-        List<Theme> filtered = themeRepository.filterThemes(
-                horror, activity, minLevel, maxLevel, minRating, maxRating, location
+        List<Theme> themes = themeRepository.findThemesByCriteria(
+                keyword, horror, activity, levelMin, levelMax, location, page, size, sort
         );
 
-        log.info("✅ [필터링 결과] 총 {}개의 테마 반환됨", filtered.size());
+        String dateString = date != null ? date.toString() : LocalDate.now().toString();
 
-        return filtered.stream()
-                .map(ThemeDto::toDto)
-                .collect(Collectors.toList());
-    }
-
-
-    public List<MobileThemeDto> getThemesWithAvailableTime(int page, int size, LocalDate date) {
-        List<Theme> themes = themeRepository.findThemesOrderByReviewCountAndRating(page, size);
-        String dateString = date.toString();
-
-        return themes.stream().map(theme -> {
-            List<String> times = themeMongoRepository.findByThemeIdAndDate(theme.getId().intValue(), dateString)
+        List<MobileThemeDto> result = themes.stream().map(theme -> {
+            List<String> availableTimes = themeMongoRepository.findByThemeIdAndDate(theme.getId().intValue(), dateString)
                     .map(ThemeDocument::getAvailableTimes)
                     .orElse(Collections.emptyList());
-            return MobileThemeDto.from(theme, times);
+            return MobileThemeDto.from(theme, availableTimes);
         }).collect(Collectors.toList());
+
+        return result;
     }
 
 
@@ -145,19 +114,6 @@ public class ThemeService {
         return result;
     }
 
-    public List<MobileThemeDto> searchThemesWithFilters(
-            String keyword, Integer horror, Integer activity, String location, LocalDate date) {
-
-        List<Theme> themes = themeRepository.searchByKeywordAndFilters(keyword, horror, activity, location);
-        String dateString = date.toString();
-
-        return themes.stream().map(theme -> {
-            List<String> times = themeMongoRepository.findByThemeIdAndDate(theme.getId().intValue(), dateString)
-                    .map(ThemeDocument::getAvailableTimes)
-                    .orElse(Collections.emptyList());
-            return MobileThemeDto.from(theme, times);
-        }).collect(Collectors.toList());
-    }
 
 
 

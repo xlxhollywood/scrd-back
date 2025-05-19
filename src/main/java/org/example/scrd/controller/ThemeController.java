@@ -42,9 +42,7 @@ public class ThemeController {
     }
 
 
-    /**
-     * 특정 테마를 불러오는 API
-     * */
+
     @GetMapping("/theme/{themeId}")
     public ResponseEntity<ThemeDto> getTheme(@PathVariable Long themeId) {
         ThemeDto theme = ThemeDto.toDto(themeService.getThemeById(themeId));
@@ -102,63 +100,32 @@ public class ThemeController {
      * 필터 조건 기반 테마 조회 API
      * ex: /scrd/api/theme/filter?horror=1&activity=1&minLevel=1.0&maxLevel=3.0&minRating=3.5&location=강남
      */
+
     @GetMapping("/theme/filter")
-    public ResponseEntity<List<ThemeDto>> filterThemes(
-            @RequestParam(required = false, name = "horror") Integer horror,
-            @RequestParam(required = false, name = "activity") Integer activity,
-            @RequestParam(required = false, name = "levelMin") Float minLevel,
-            @RequestParam(required = false, name = "levelMax") Float maxLevel,
-            @RequestParam(required = false, name = "ratingMin") Float minRating,
-            @RequestParam(required = false, name = "ratingMax") Float maxRating,
-            @RequestParam(required = false, name = "location") String location
-    ) {
-
-        List<ThemeDto> themes = themeService.filterThemes(
-                horror, activity, minLevel, maxLevel, minRating, maxRating, location
-        );
-        return ResponseEntity.ok(themes);
-    }
-
-
-    @GetMapping("/theme/paged")
-    public ResponseEntity<List<?>> getThemesPaged(
+    public ResponseEntity<List<MobileThemeDto>> getThemesWithFiltersAndSorting(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Integer horror,
+            @RequestParam(required = false) Integer activity,
+            @RequestParam(required = false) Float levelMin,
+            @RequestParam(required = false) Float levelMax,
+            @RequestParam(required = false) String location,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
-            @RequestParam(required = false) String sort,
-            @RequestParam(defaultValue = "web") String platform,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+            @RequestParam(defaultValue = "combined") String sort
     ) {
-        LocalDate targetDate = (date != null) ? date : LocalDate.now();
-
-        if ("mobile".equalsIgnoreCase(platform)) {
-            List<MobileThemeDto> mobileThemes = themeService.getThemesWithAvailableTime(page, size, targetDate);
-            return ResponseEntity.ok(mobileThemes);
-        } else {
-            List<ThemeDto> themes = "rating".equalsIgnoreCase(sort)
-                    ? themeService.getThemesSortedByRating(page, size)
-                    : themeService.getAllThemes(page, size);
-            return ResponseEntity.ok(themes);
-        }
+        List<MobileThemeDto> results = themeService.getThemesByFilterCriteria(
+                keyword, horror, activity, levelMin, levelMax, location, date, page, size, sort
+        );
+        return ResponseEntity.ok(results);
     }
+
 
     @GetMapping("theme/location-counts")
     public ResponseEntity<Map<String, Object>> getLocationCounts() {
         return ResponseEntity.ok(themeService.getLocationCountsWithTotal());
     }
 
-    @GetMapping("/theme/search/filtered")
-    public ResponseEntity<List<MobileThemeDto>> searchThemesWithFilters(
-            @RequestParam(required = false) String keyword,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-            @RequestParam(required = false) Integer horror,
-            @RequestParam(required = false) Integer activity,
-            @RequestParam(required = false) String location
-    ) {
-        LocalDate targetDate = (date != null) ? date : LocalDate.now();
-        List<MobileThemeDto> results = themeService.searchThemesWithFilters(
-                keyword, horror, activity, location, targetDate);
-        return ResponseEntity.ok(results);
-    }
 
 
 

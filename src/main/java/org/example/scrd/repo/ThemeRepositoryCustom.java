@@ -9,21 +9,19 @@ import java.util.Optional;
 
 public interface ThemeRepositoryCustom {
     List<Theme> findThemesOrderByReviewCountAndRating();
-    List<Theme> findThemesOrderByReviewCountAndRating(int page, int size);
+    List<LocationCountDto> countThemesByLocation();
 
-    List<Theme> filterThemes(
+    public List<Theme> findThemesByCriteria(
+            String keyword,
             Integer horror,
             Integer activity,
             Float levelMin,
             Float levelMax,
-            Float ratingMin,
-            Float ratingMax,
-            String location
+            String location,
+            int page,
+            int size,
+            String sort
     );
-
-    List<LocationCountDto> countThemesByLocation();
-
-    List<Theme> searchByKeywordAndFilters(String keyword, Integer horror, Integer activity, String location);
 
 
 
