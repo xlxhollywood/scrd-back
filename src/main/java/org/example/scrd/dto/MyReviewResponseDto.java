@@ -5,6 +5,7 @@ import lombok.Getter;
 import org.example.scrd.domain.Review;
 import org.example.scrd.domain.Theme;
 
+import java.time.LocalDateTime;
 import java.util.List;
 @Builder
 @Getter
@@ -21,6 +22,7 @@ public class MyReviewResponseDto {
     private Integer hintUsageCount;
     private Boolean isSuccessful;
     private String clearTime;
+    private LocalDateTime regDate;
 
     private String themeTitle;
     private String themeBrand;
@@ -48,6 +50,7 @@ public class MyReviewResponseDto {
                 .hintUsageCount(review.getHintUsageCount())
                 .isSuccessful(review.getIsSuccessful())
                 .clearTime(review.getClearTime())
+                .regDate(review.getRegDate())
                 .tagNames(tagNames)
 
                 .themeBrand(theme.getBrand())
