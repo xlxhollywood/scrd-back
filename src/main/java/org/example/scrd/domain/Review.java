@@ -27,6 +27,8 @@ public class Review extends BaseEntity {
 
     private Integer hintUsageCount;
 
+    private String clearTime;
+
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
     private User user;
@@ -50,6 +52,7 @@ public class Review extends BaseEntity {
                         .activity(dto.getActivity())
                         .isSuccessful(dto.getIsSuccessful())
                         .hintUsageCount(dto.getHintUsageCount())
+                        .clearTime(dto.getClearTime())
                         .theme(theme)
                         .build();
         return review;

@@ -18,6 +18,9 @@ public class MyReviewResponseDto {
     private int horror;
     private int activity;
     private List<String> tagNames; // 태그 이름 리스트 추가
+    private Integer hintUsageCount;
+    private Boolean isSuccessful;
+    private String clearTime;
 
     private String themeTitle;
     private String themeBrand;
@@ -42,9 +45,11 @@ public class MyReviewResponseDto {
                 .stars(review.getStars())
                 .horror(review.getHorror())
                 .activity(review.getActivity())
+                .hintUsageCount(review.getHintUsageCount())
+                .isSuccessful(review.getIsSuccessful())
+                .clearTime(review.getClearTime())
                 .tagNames(tagNames)
 
-                // 🔽 추가된 부분
                 .themeBrand(theme.getBrand())
                 .themeTitle(theme.getTitle())
                 .themeBranch(theme.getBranch())

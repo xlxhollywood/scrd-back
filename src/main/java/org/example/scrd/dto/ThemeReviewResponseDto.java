@@ -24,6 +24,10 @@ public class ThemeReviewResponseDto {
     private LocalDateTime regDate;
     private List<String> tagNames; // 태그 이름 리스트 추가
 
+    private Integer hintUsageCount;
+    private Boolean isSuccessful;
+    private String clearTime;
+
 // 리뷰 가져오기용 Dto
 public static ThemeReviewResponseDto from(Review review) {
     List<String> tagNames = review.getTagMaps().stream()
@@ -40,6 +44,9 @@ public static ThemeReviewResponseDto from(Review review) {
             .stars(review.getStars())
             .horror(review.getHorror())
             .activity(review.getActivity())
+            .hintUsageCount(review.getHintUsageCount())
+            .isSuccessful(review.getIsSuccessful())
+            .clearTime(review.getClearTime())
             .tagNames(tagNames)
             .regDate(review.getRegDate())
             .build();

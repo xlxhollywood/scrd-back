@@ -17,4 +17,5 @@ public class ReviewRequest {
     private List<Long> tagIds;
     private Boolean isSuccessful;
     private Integer hintUsageCount;
+    private String clearTime;
 }

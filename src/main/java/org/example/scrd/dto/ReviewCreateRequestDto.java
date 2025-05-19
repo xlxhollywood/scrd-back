@@ -22,6 +22,7 @@ public class ReviewCreateRequestDto {
     private List<String> tagNames; // 태그 이름 리스트 추가
     private Boolean isSuccessful;
     private Integer hintUsageCount;
+    private String clearTime;
 
     // 리뷰 등록용 Dto
     public static ReviewCreateRequestDto from(ReviewRequest request) {
@@ -33,6 +34,7 @@ public class ReviewCreateRequestDto {
                 .activity(request.getActivity())
                 .isSuccessful(request.getIsSuccessful())
                 .hintUsageCount(request.getHintUsageCount())
+                .clearTime(request.getClearTime())
                 .build();
     }
 
