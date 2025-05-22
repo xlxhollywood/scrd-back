@@ -3,6 +3,7 @@ package org.example.scrd.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.scrd.domain.User;
+import org.example.scrd.dto.Tier;
 import org.example.scrd.dto.UserDto;
 import org.example.scrd.repo.UserRepository;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ public class AuthService {
                 .orElseGet(() -> {
                     User newUser = User.from(dto);
                     newUser.setNickName(randomNicknameService.generateUniqueNickname());
+                    newUser.setTier(Tier.ONE);
                     return userRepository.save(newUser);
                 });
 

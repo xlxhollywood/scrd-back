@@ -196,7 +196,6 @@ public class PartyService {
     }
 
 
-
     @Transactional(readOnly = true)
     public List<PartyJoinDto> getJoinRequestsByWriter(Long writerId) {
         List<PartyJoin> joins = joinRepository.findAllByWriterId(writerId);
@@ -204,6 +203,15 @@ public class PartyService {
                 .map(PartyJoinDto::from)
                 .collect(Collectors.toList());
     }
+
+    @Transactional(readOnly = true)
+    public List<PartyJoinDto> getMyResolvedJoins(Long userId) {
+        List<PartyJoin> joins = joinRepository.findAllByUserIdAndStatusNotPending(userId);
+        return joins.stream()
+                .map(PartyJoinDto::from)
+                .collect(Collectors.toList());
+    }
+
 
 
 }

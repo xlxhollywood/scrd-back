@@ -24,13 +24,13 @@ public enum Tier {
     }
 
     public static Tier getTierByCount(int count) {
-        if (count <= 5) {
+        if (count <= 50) {
             return ONE;
-        } else if (count <= 10) {
+        } else if (count <= 100) {
             return TWO;
-        } else if (count <= 15) {
+        } else if (count <= 150) {
             return THREE;
-        } else if (count <= 20) {
+        } else if (count <= 200) {
             return FOUR;
         } else {
             return FIVE;

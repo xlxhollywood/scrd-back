@@ -77,11 +77,19 @@ public class PartyController {
     }
 
 
-    // 알림 창에서 파티 참여 글을 확인하는 ** API 일행 신청자들 목록 확인 (PENDING만 필터링)
+    // 파티장이 신청자의 일행 신청 글들을 확인하는 API
     @GetMapping("/join/notification")
     public ResponseEntity<ApiResponse<List<PartyJoinDto>>> getJoinRequestsByWriter(
             @AuthenticationPrincipal User user) {
         List<PartyJoinDto> joins = partyService.getJoinRequestsByWriter(user.getId());
+        return ResponseEntity.ok(ApiResponse.success(joins));
+    }
+
+    // 알림 창에서 사용자가 본인이 신청했던 일행의 수락 혹은 거절 상태를 알 수 있는 API
+    @GetMapping("/join/status")
+    public ResponseEntity<ApiResponse<List<PartyJoinDto>>> getMyJoinStatus(
+            @AuthenticationPrincipal User user) {
+        List<PartyJoinDto> joins = partyService.getMyResolvedJoins(user.getId());
         return ResponseEntity.ok(ApiResponse.success(joins));
     }
 
@@ -102,8 +110,6 @@ public class PartyController {
         partyService.cancelJoin(postId, user.getId());
         return ResponseEntity.ok(ApiResponse.success());
     }
-
-
 
 }
 
