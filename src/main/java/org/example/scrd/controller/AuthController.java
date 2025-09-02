@@ -33,8 +33,6 @@ public class AuthController {
     @Value("${custom.jwt.refresh-expire-time-ms}") // JWT 만료 시간을 주입받음
     private long EXPIRE_REFRESH_TIME_MS;
 
-    // 카카오 로그인을 처리하는 엔드포인트 코드를 받자마자 GetMapping 호출됨
-    // http://localhost:8080/scrd/auth/kakao-login"
     @GetMapping("/scrd/auth/kakao-login")
     public ResponseEntity<KakaoLoginResponse> kakaoLogin(
             @RequestParam String code,

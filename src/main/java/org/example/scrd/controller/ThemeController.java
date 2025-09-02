@@ -42,7 +42,6 @@ public class ThemeController {
     }
 
 
-
     @GetMapping("/theme/{themeId}")
     public ResponseEntity<ThemeDto> getTheme(@PathVariable Long themeId) {
         ThemeDto theme = ThemeDto.toDto(themeService.getThemeById(themeId));
@@ -71,15 +70,6 @@ public class ThemeController {
         List<String> availableTime = themeService.getAvailableTimesByDate(themeId, date);
         ThemeAvailableTimeResponse themeAvailableTimeResponse = new ThemeAvailableTimeResponse(date,availableTime);
         return ResponseEntity.ok(themeAvailableTimeResponse);
-    }
-
-    /**
-     키워드 기반으로 매장이나 테마를 검색해 줌.
-     * */
-    @GetMapping("/theme/search")
-    public ResponseEntity<List<ThemeDto>> searchThemes(@RequestParam String keyword) {
-        List<ThemeDto> results = themeService.searchThemes(keyword);
-        return ResponseEntity.ok(results);
     }
 
     // Default  .. 추천 + 평점 많은 순으로 테마 불러오기
