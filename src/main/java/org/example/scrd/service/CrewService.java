@@ -25,7 +25,7 @@ public class CrewService {
                 .orElseThrow(() -> new NotFoundException("유저가 존재하지 않습니다.")), dto, Crew.Role.LEADER));
     }
 
-    public void joinCrew(Long crewId, Long userId) { // crew 신청하기 TODO : 대기로 넘어가는 과정 설정 필요
+    public void joinCrew(Long crewId, Long userId) { // crew 신청하기
         CrewDto crewDto = CrewDto.from(crewRepository.findById(crewId).orElseThrow(() -> new NotFoundException("해당 크루는 존재하지 않습니다.")));
         crewRepository.save(Crew.from(userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("유저가 존재하지 않습니다.")), crewDto, Crew.Role.MEMBER));

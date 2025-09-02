@@ -65,18 +65,6 @@ public class ThemeDto {
                 .build();
     }
 
-    // 검색용 dto
-    public static ThemeDto toWebThemeSearchDto(Theme theme) {
-        return ThemeDto.builder()
-                .id(theme.getId())
-                .title(theme.getTitle())
-                .location(theme.getLocation())
-                .image(theme.getImage())
-                .branch(theme.getBranch())
-                .brand(theme.getBrand())
-                .build();
-    }
-
     public static ThemeDto toWebDto(Theme theme) {
         return ThemeDto.builder()
                 .id(theme.getId())
