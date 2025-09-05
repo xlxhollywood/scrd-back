@@ -1,7 +1,10 @@
 package org.example.scrd.controller;
 
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
+import org.example.scrd.dto.AppleDto;
 import org.example.scrd.util.JwtUtil;
 import org.example.scrd.dto.UserDto;
 import org.example.scrd.controller.response.KakaoLoginResponse;
@@ -60,29 +63,58 @@ public class AuthController {
                         .build());
     }
 
-    @GetMapping("/scrd/auth/apple-login")
+    @PostMapping("/scrd/auth/apple-login")
     public ResponseEntity<AppleLoginResponse> appleLogin(
-            @RequestParam String code,
+            @RequestParam(required = false) String code,
+            @RequestParam(required = false) String id_token,
+            @RequestParam(required = false) String user,
+            @RequestParam(required = false) String state,
             HttpServletRequest request,
             HttpServletResponse response) {
 
-        UserDto userDto =
-                authService.appleLogin(
-                        appleService.appleLogin(code, request.getHeader("Origin") + "/login/oauth/apple"));
+        try {
+            // 1. AppleService를 통해 Apple에서 사용자 정보 가져오기
+            UserDto appleUserInfo = appleService.getAppleInfo(code);
 
-        // JWT 토큰 생성
-        List<String> jwtToken = jwtUtil.createToken(userDto.getId(), SECRET_KEY, EXPIRE_TIME_MS, EXPIRE_REFRESH_TIME_MS);
+            // 2. user 파라미터에서 이름 추출 (첫 로그인 시)
+            String userName = "Apple User"; // 기본값
+            if (user != null) {
+                ObjectMapper mapper = new ObjectMapper();
+                JsonNode userInfo = mapper.readTree(user);
+                String firstName = userInfo.path("name").path("firstName").asText();
+                String lastName = userInfo.path("name").path("lastName").asText();
+                userName = firstName + " " + lastName;
+            }
 
-        // TODO: 액세스 토큰을 Authorization 헤더, X-Refresh-Token 헤더에 추가
-        response.setHeader("Authorization", "Bearer " + jwtToken.get(0));
-        response.setHeader("X-Refresh-Token",  jwtToken.get(1));
+            // UserDto에 이름 설정
+            appleUserInfo = UserDto.builder()
+                    .appleId(appleUserInfo.getAppleId())
+                    .email(appleUserInfo.getEmail())
+                    .name(userName) // 추출한 이름 사용
+                    .build();
 
-        // 응답 본문에 JWT 토큰 및 사용자 정보 추가
-        return ResponseEntity.ok(
-                AppleLoginResponse.builder()
-                        .name(userDto.getName())
-                        .email(userDto.getEmail())
-                        .sub(userDto.getKakaoId().toString()) // 애플의 고유 식별자
-                        .build());
+            // 2. AuthService를 통해 로그인 처리 (DB 저장/조회)
+            UserDto loginUser = authService.appleLogin(appleUserInfo);
+
+            // 3. JWT 토큰 생성
+            List<String> jwtToken = jwtUtil.createToken(loginUser.getId(), SECRET_KEY, EXPIRE_TIME_MS, EXPIRE_REFRESH_TIME_MS);
+
+            // 4. 헤더에 토큰 설정
+            response.setHeader("Authorization", "Bearer " + jwtToken.get(0));
+            response.setHeader("X-Refresh-Token", jwtToken.get(1));
+
+
+            return ResponseEntity.ok(
+                    AppleLoginResponse.builder()
+                            .name(loginUser.getName())
+                            .email(loginUser.getEmail())
+                            .appleId(loginUser.getAppleId())
+                            .build());
+
+        } catch (Exception e) {
+            System.out.println("❌ Apple login error: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }

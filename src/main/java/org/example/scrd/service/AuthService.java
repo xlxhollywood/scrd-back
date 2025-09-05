@@ -3,6 +3,7 @@ package org.example.scrd.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.scrd.domain.User;
+import org.example.scrd.dto.AppleDto;
 import org.example.scrd.dto.Tier;
 import org.example.scrd.dto.UserDto;
 import org.example.scrd.repo.UserRepository;
@@ -41,18 +42,10 @@ public class AuthService {
         return UserDto.from(user);
     }
 
-    // 사용자 ID로 로그인한 사용자 정보 조회
-    public User getLoginUser(Long userId) {
-        // 사용자 ID로 사용자를 조회, 없으면 예외 발생
-        return userRepository
-                .findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
-    }
-
-    // 애플 로그인 로직
+    // Apple 로그인 로직
     public UserDto appleLogin(UserDto dto) {
         User user = userRepository
-                .findByKakaoId(dto.getKakaoId())
+                .findByAppleId(dto.getAppleId())  // AppleDto의 getId() 사용
                 .orElseGet(() -> {
                     User newUser = User.from(dto);
                     newUser.setNickName(randomNicknameService.generateUniqueNickname());
@@ -60,17 +53,25 @@ public class AuthService {
                     return userRepository.save(newUser);
                 });
 
+        // Apple에서 받은 정보로 업데이트
         user.setEmail(dto.getEmail());
-        user.setProfileImageUrl(dto.getProfileImageUrl());
-        user.setName(dto.getName());
+        user.setAppleId(dto.getAppleId()); // Apple ID 설정
 
         // 기존 유저인데 닉네임이 없는 경우
         if (user.getNickName() == null || user.getNickName().isBlank()) {
             user.setNickName(randomNicknameService.generateUniqueNickname());
-            userRepository.save(user); // 변경 즉시 DB에 반영
+            userRepository.save(user);
         }
 
         return UserDto.from(user);
+    }
+
+    // 사용자 ID로 로그인한 사용자 정보 조회
+    public User getLoginUser(Long userId) {
+        // 사용자 ID로 사용자를 조회, 없으면 예외 발생
+        return userRepository
+                .findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
     }
 }
 
