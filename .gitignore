@@ -39,3 +39,10 @@ application.yml
 
 # QueryDSL generated files
 /src/main/generated/
+
+nginx/certbot/
+*.pem
+*.key
+
+*.p8
+
