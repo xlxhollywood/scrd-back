@@ -49,8 +49,8 @@ public class JwtUtil {
                 .compact();
 
         // TODO : Refresh Token Redis에 저장해야함
-        RefreshToken redis = new RefreshToken(userId,refreshToken);
-        refreshTokenRepository.save(redis);
+        RefreshToken rt = new RefreshToken(userId, refreshToken, EXPIRE_REFRESH_TIME_MS / 1000L);
+        refreshTokenRepository.save(rt);
 
         // 액세스, 리프레쉬가 들어가 있는 토큰 객체를 반환
         return Arrays.asList(accessToken, refreshToken);

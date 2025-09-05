@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class UserDto {
     private Long id;
     private Long kakaoId;
+    private String appleId;
     private String name;
     private String nickName;
     private String email;
@@ -25,23 +26,11 @@ public class UserDto {
         return UserDto.builder()
                 .id(user.getId())
                 .kakaoId(user.getKakaoId())
+                .appleId(user.getAppleId())  // Apple ID도 포함
                 .nickName(user.getNickName())
                 .email(user.getEmail())
                 .profileImageUrl(user.getProfileImageUrl())
                 .build();
     }
 
-    public static ArrayList<UserDto> from(ArrayList<User> users) {
-        ArrayList<UserDto> userDtos = new ArrayList<>();
-        for (User user : users) {
-            userDtos.add(UserDto.builder()
-                    .id(user.getId())
-                    .kakaoId(user.getKakaoId())
-                    .nickName(user.getNickName())
-                    .email(user.getEmail())
-                    .profileImageUrl(user.getProfileImageUrl())
-                    .build());
-        }
-        return userDtos;
-    }
 }

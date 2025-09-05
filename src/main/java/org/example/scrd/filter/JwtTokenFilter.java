@@ -35,6 +35,11 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         String uri = request.getRequestURI();
 
+        // 디버깅 로그 추가 - 이것부터 찍혀야 함
+        System.out.println("=== JWT 필터 시작 ===");
+        System.out.println("URI: " + uri);
+        System.out.println("Method: " + request.getMethod());
+
         // 1) 특정 경로는 필터 패스
         if (uri.startsWith("/error") ||
                 uri.startsWith("/scrd/auth/") ||
