@@ -45,6 +45,8 @@ public class Notification extends BaseEntity {
     public enum NotificationType {
         JOIN_REQUEST,
         APPROVED,
-        REJECTED
+        REJECTED,
+        COMMENT,           // 새로 추가: 댓글 알림
+        REPLY             // 새로 추가: 대댓글 알림
     }
 }
