@@ -1,10 +1,7 @@
 package org.example.scrd.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.scrd.domain.PartyComment;
-import org.example.scrd.domain.PartyPost;
-import org.example.scrd.domain.Role;
-import org.example.scrd.domain.User;
+import org.example.scrd.domain.*;
 import org.example.scrd.dto.request.PartyCommentRequest;
 import org.example.scrd.dto.response.PartyCommentResponse;
 import org.example.scrd.exception.NotFoundException;
@@ -57,6 +54,60 @@ public class PartyCommentService {
             sendReplyNotification(savedComment);
         }
     }
+
+    private void sendCommentNotification(PartyComment comment) {
+        PartyPost post = comment.getPost();
+        User postWriter = post.getWriter();
+        User commentWriter = comment.getWriter();
+
+        // 자기 자신에게는 알림 안 보냄
+        if (postWriter.getId().equals(commentWriter.getId())) {
+            return;
+        }
+
+        // ✅ commentNotify 사용
+        notificationService.commentNotify(
+                postWriter,
+                commentWriter,
+                Notification.NotificationType.COMMENT,
+                commentWriter.getNickName() + "님이 \"" + post.getTitle() + "\" 게시글에 댓글을 남겼습니다.",
+                post
+        );
+    }
+
+    private void sendReplyNotification(PartyComment reply) {
+        PartyComment parentComment = reply.getParent();
+        PartyPost post = reply.getPost();
+        User replyWriter = reply.getWriter();
+
+        // 1. 원댓글 작성자에게 알림
+        User parentCommentWriter = parentComment.getWriter();
+        if (!parentCommentWriter.getId().equals(replyWriter.getId())) {
+            // ✅ commentNotify 사용
+            notificationService.commentNotify(
+                    parentCommentWriter,
+                    replyWriter,
+                    Notification.NotificationType.REPLY,
+                    replyWriter.getNickName() + "님이 회원님의 댓글에 답글을 남겼습니다.",
+                    post
+            );
+        }
+
+        // 2. 게시글 작성자에게도 알림
+        User postWriter = post.getWriter();
+        if (!postWriter.getId().equals(replyWriter.getId()) &&
+                !postWriter.getId().equals(parentCommentWriter.getId())) {
+            // ✅ commentNotify 사용
+            notificationService.commentNotify(
+                    postWriter,
+                    replyWriter,
+                    Notification.NotificationType.REPLY,
+                    replyWriter.getNickName() + "님이 \"" + post.getTitle() + "\" 게시글에 답글을 남겼습니다.",
+                    post
+            );
+        }
+    }
+
 
     public List<PartyCommentResponse> getCommentsByPost(Long postId) {
         List<PartyComment> allComments = commentRepository.findByPostId(postId);
