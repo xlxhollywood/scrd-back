@@ -80,7 +80,7 @@ public class PartyService {
         joinRepository.save(partyJoin);
 
         // 호스트에게 알림 보내기
-        notificationService.notify(
+        notificationService.partyNotify(
                 partyPost.getWriter(),                     // 알림 받는 사람 (호스트)
                 user,                                 // 알림 보낸 사람 (신청자)
                 Notification.NotificationType.JOIN_REQUEST,
@@ -115,7 +115,7 @@ public class PartyService {
 
         // 신청자에게 알림 보내기
         if (newStatus == PartyJoin.JoinStatus.APPROVED) {
-            notificationService.notify(
+            notificationService.partyNotify(
                     join.getUser(),                        // 신청자
                     post.getWriter(),                      // 알림 보낸 사람 (호스트)
                     Notification.NotificationType.APPROVED,
@@ -123,7 +123,7 @@ public class PartyService {
                     post
             );
         } else if (newStatus == PartyJoin.JoinStatus.REJECTED) {
-            notificationService.notify(
+            notificationService.partyNotify(
                     join.getUser(),
                     post.getWriter(),
                     Notification.NotificationType.REJECTED,

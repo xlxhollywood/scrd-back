@@ -1,10 +1,9 @@
 package org.example.scrd.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.example.scrd.BaseEntity;
+import org.example.scrd.dto.request.PartyCommentRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +12,8 @@ import java.util.List;
 @Table(name = "party_comment")
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class PartyComment extends BaseEntity {
 
@@ -38,6 +39,15 @@ public class PartyComment extends BaseEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
+
+    public static PartyComment from(PartyCommentRequest dto, PartyPost post, User writer, PartyComment parent) {
+        return PartyComment.builder()
+                .post(post)
+                .writer(writer)
+                .content(dto.getContent())
+                .parent(parent)
+                .build();
+    }
 
 }
 

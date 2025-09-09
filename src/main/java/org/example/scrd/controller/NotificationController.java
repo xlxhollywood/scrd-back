@@ -1,14 +1,20 @@
 package org.example.scrd.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.scrd.controller.response.ApiResponse;
 import org.example.scrd.domain.User;
+import org.example.scrd.dto.response.NotificationResponse;
 import org.example.scrd.exception.WrongTokenException;
+import org.example.scrd.service.NotificationService;
 import org.example.scrd.service.SseEmitterService;
 import org.example.scrd.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+
+import java.util.List;
 
 import static javax.crypto.Cipher.SECRET_KEY;
 
@@ -18,6 +24,7 @@ import static javax.crypto.Cipher.SECRET_KEY;
 public class NotificationController {
 
     private final SseEmitterService sseEmitterService;
+    private final NotificationService notificationService;
     private final JwtUtil jwtUtil;
 
     @Value("${custom.jwt.secret}") // application properties에서 JWT 비밀키를 주입받음
@@ -28,6 +35,38 @@ public class NotificationController {
         return sseEmitterService.subscribe(user.getId());
     }
 
+    // 새로 추가: 내 알림 목록 조회
+    @GetMapping("/notifications")
+    public ResponseEntity<ApiResponse<List<NotificationResponse>>> getMyNotifications(
+            @AuthenticationPrincipal User user) {
+        List<NotificationResponse> notifications = notificationService.getNotificationsByUser(user.getId());
+        return ResponseEntity.ok(ApiResponse.success(notifications));
+    }
+
+    // 새로 추가: 알림 읽음 처리
+    @PatchMapping("/notifications/{notificationId}/read")
+    public ResponseEntity<ApiResponse<Object>> markAsRead(
+            @PathVariable Long notificationId,
+            @AuthenticationPrincipal User user) {
+        notificationService.markAsRead(notificationId, user.getId());
+        return ResponseEntity.ok(ApiResponse.success());
+    }
+
+    // 새로 추가: 모든 알림 읽음 처리
+    @PatchMapping("/notifications/read-all")
+    public ResponseEntity<ApiResponse<Object>> markAllAsRead(
+            @AuthenticationPrincipal User user) {
+        notificationService.markAllAsRead(user.getId());
+        return ResponseEntity.ok(ApiResponse.success());
+    }
+
+    // 새로 추가: 읽지 않은 알림 개수 조회
+    @GetMapping("/notifications/unread-count")
+    public ResponseEntity<ApiResponse<Long>> getUnreadCount(
+            @AuthenticationPrincipal User user) {
+        long count = notificationService.getUnreadCount(user.getId());
+        return ResponseEntity.ok(ApiResponse.success(count));
+    }
 
 
 }

@@ -33,6 +33,7 @@ public class Notification extends BaseEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
+    @Builder.Default
     @Column(name = "is_read", nullable = false)
     private boolean isRead = false;
 
@@ -40,6 +41,11 @@ public class Notification extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "related_post_id")
     private PartyPost relatedPost;
+
+    // 관련 댓글 ID (새로 추가)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "related_comment_id")
+    private PartyComment relatedComment;
 
 
     public enum NotificationType {
