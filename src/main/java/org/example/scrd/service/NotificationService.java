@@ -22,8 +22,23 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final SseEmitterService sseEmitterService;
 
-    // ✅ 파티 관련 알림 (기존 notify → partyNotify로 변경)
+    // ✅ 일행 신청/수락/거절 관련 알림 (기존 notify → partyNotify로 변경)
     public void partyNotify(User receiver, User sender, Notification.NotificationType type, String content, PartyPost relatedPost) {
+        Notification notification = Notification.builder()
+                .receiver(receiver)
+                .sender(sender)
+                .type(type)
+                .content(content)
+                .relatedPost(relatedPost)
+                .isRead(false)
+                .build();
+
+        notificationRepository.save(notification);
+        sseEmitterService.sendNotification(receiver.getId(), content);
+    }
+
+    // ✅ 일행 게시글 관련 알림 (새로 추가)
+    public void commentNotify(User receiver, User sender, Notification.NotificationType type, String content, PartyPost relatedPost) {
         Notification notification = Notification.builder()
                 .receiver(receiver)
                 .sender(sender)
