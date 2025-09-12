@@ -1,5 +1,8 @@
 package org.example.scrd.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.example.scrd.domain.User;
 import org.example.scrd.dto.MobileThemeDto;
@@ -17,12 +20,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/scrd/api/save")
 @RequiredArgsConstructor
+@Tag(name = "SavedTheme", description = "찜한 테마 관리")
+@SecurityRequirement(name = "Bearer Authentication")
 public class SavedThemeController {
     private final SavedThemeService savedThemeService;
 
-    /**
-     * 저장한 테마를 볼 수 있는 API
-     * */
+    @Operation(summary = "찜한 테마 목록 조회", description = "내가 찜한 테마 목록을 예약 가능 시간과 함께 조회합니다")
     @GetMapping
     public ResponseEntity<List<MobileThemeDto>> getSavedThemesWithTimes(
             @AuthenticationPrincipal User user,
@@ -33,9 +36,7 @@ public class SavedThemeController {
         return ResponseEntity.ok(savedThemes);
     }
 
-    /**
-     * 테마를 저장/취소 (토글) 하는 API
-     * */
+    @Operation(summary = "테마 찜하기/취소", description = "테마를 찜하거나 찜을 취소합니다 (토글 방식)")
     @PostMapping("/{themeId}")
     public ResponseEntity<SavedThemeResponse> saveUserTheme(
             @PathVariable Long themeId,
