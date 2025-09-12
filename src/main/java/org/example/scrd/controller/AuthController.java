@@ -3,6 +3,8 @@ package org.example.scrd.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.scrd.dto.AppleDto;
 import org.example.scrd.util.JwtUtil;
@@ -22,26 +24,30 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Auth", description = "인증 관리")
 public class AuthController {
 
-    private final AuthService authService; // 사용자 인증 관련 서비스
-    private final KakaoService kakaoService; // 카카오 API와 통신하는 서비스
-    private final AppleService appleService; // 애플 API와 통신하는 서비스
+    private final AuthService authService;
+    private final KakaoService kakaoService;
+    private final AppleService appleService;
     private final JwtUtil jwtUtil;
-
-    @Value("${custom.jwt.secret}") // application properties에서 JWT 비밀키를 주입받음
+    @Value("${custom.jwt.secret}")
     private String SECRET_KEY;
-
-    @Value("${custom.jwt.expire-time-ms}") // JWT 만료 시간을 주입받음
+    @Value("${custom.jwt.expire-time-ms}")
     private long EXPIRE_TIME_MS;
-    @Value("${custom.jwt.refresh-expire-time-ms}") // JWT 만료 시간을 주입받음
+    @Value("${custom.jwt.refresh-expire-time-ms}")
     private long EXPIRE_REFRESH_TIME_MS;
 
+
+    @Operation(
+            summary = "카카오 로그인",
+            description = "카카오 OAuth2 인증 코드로 로그인합니다. 성공 시 JWT 토큰이 헤더에 포함됩니다."
+    )
     @GetMapping("/scrd/auth/kakao-login")
     public ResponseEntity<KakaoLoginResponse> kakaoLogin(
             @RequestParam String code,
             HttpServletRequest request,
-            HttpServletResponse response) { // HttpServletResponse 추가
+            HttpServletResponse response) {
 
         UserDto userDto =
                 authService.kakaoLogin(
@@ -63,6 +69,10 @@ public class AuthController {
                         .build());
     }
 
+    @Operation(
+            summary = "Apple 로그인",
+            description = "Apple OAuth2 인증을 통해 로그인합니다. 성공 시 JWT 토큰이 헤더에 포함됩니다."
+    )
     @PostMapping("/scrd/auth/apple-login")
     public ResponseEntity<AppleLoginResponse> appleLogin(
             @RequestParam(required = false) String code,
