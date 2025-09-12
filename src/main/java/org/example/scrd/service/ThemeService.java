@@ -10,6 +10,7 @@ import org.example.scrd.dto.ThemeDto;
 import org.example.scrd.exception.NotFoundException;
 import org.example.scrd.repo.ThemeMongoRepository;
 import org.example.scrd.repo.ThemeRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -65,6 +66,8 @@ public class ThemeService {
                 .collect(Collectors.toList());
     }
 
+    @Cacheable(value = "themes", key = "'first-page-default'",
+            condition = "#page == 0 && #keyword == null && #horror == null && #activity == null && #levelMin == null && #levelMax == null && #location == null && #date == null && #sort == 'combined'")
     public List<MobileThemeDto> getThemesByFilterCriteria(
             String keyword,
             Integer horror,

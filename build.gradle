@@ -89,6 +89,12 @@ dependencies {
     // PEM 파일 읽기용 (Apple 키 파일 처리)
     implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
     implementation 'org.bouncycastle:bcpkix-jdk15on:1.70'
+    // 프로메테우스 그라파나
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+
+    // Swagger (OpenAPI 3)
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 
 }
 

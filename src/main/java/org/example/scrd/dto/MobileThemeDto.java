@@ -3,9 +3,11 @@ package org.example.scrd.dto;
 import lombok.Builder;
 import org.example.scrd.domain.Theme;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class MobileThemeDto extends ThemeDto {
+public class MobileThemeDto extends ThemeDto implements Serializable {
+    private static final long serialVersionUID = 1L;
     private List<String> availableTimes;
 
     @Builder(builderMethodName = "mobileBuilder")

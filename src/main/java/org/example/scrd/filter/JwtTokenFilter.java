@@ -44,7 +44,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         if (uri.startsWith("/error") ||
                 uri.startsWith("/scrd/auth/") ||
                 uri.startsWith("/scrd/every") ||
-                uri.equals("/")
+                uri.equals("/") ||
+                // Swagger UI 관련 경로 제외
+                uri.startsWith("/swagger-ui") ||
+                uri.startsWith("/v3/api-docs") ||
+                uri.equals("/swagger-ui.html")
+
         ) {
             filterChain.doFilter(request, response);
             return;

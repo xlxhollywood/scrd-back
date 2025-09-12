@@ -7,12 +7,15 @@ import lombok.Getter;
 import org.example.scrd.domain.Theme;
 import org.example.scrd.dto.request.ThemeRequest;
 
+import java.io.Serializable;
+
 
 //@JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
 @Getter
 @AllArgsConstructor
-public class ThemeDto {
+public class ThemeDto implements Serializable {
+    private static final long serialVersionUID = 1L;
     private Long id;
     private String title;
     private String description;

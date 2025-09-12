@@ -2,7 +2,7 @@ package org.example.scrd.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.scrd.domain.*;
-import org.example.scrd.dto.MyReviewResponseDto;
+import org.example.scrd.dto.response.MyReviewResponseDto;
 import org.example.scrd.dto.ReviewCreateRequestDto;
 import org.example.scrd.dto.ThemeReviewResponseDto;
 import org.example.scrd.exception.NotFoundException;

@@ -1,4 +1,4 @@
-package org.example.scrd.dto;
+package org.example.scrd.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;

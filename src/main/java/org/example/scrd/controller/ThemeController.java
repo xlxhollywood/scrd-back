@@ -7,6 +7,7 @@ import org.example.scrd.dto.ThemeDto;
 import org.example.scrd.dto.request.ThemeRequest;
 import org.example.scrd.dto.response.ThemeAvailableTimeResponse;
 import org.example.scrd.service.ThemeService;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -90,6 +91,7 @@ public class ThemeController {
      * 필터 조건 기반 테마 조회 API
      * ex: /scrd/api/theme/filter?horror=1&activity=1&minLevel=1.0&maxLevel=3.0&minRating=3.5&location=강남
      */
+
 
     @GetMapping("/theme/filter")
     public ResponseEntity<List<MobileThemeDto>> getThemesWithFiltersAndSorting(

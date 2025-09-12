@@ -52,9 +52,10 @@ public class SecurityConfig {
                 .sessionManagement(
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // ✅ 이 줄 추가!
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  //  이 줄 추가
+                        .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers("/scrd/auth/**", "/error" ,"/").permitAll()
-                        .requestMatchers("/scrd/every/**").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                         .requestMatchers("/scrd/api/**").authenticated() // 인증된 사용자만
                 );
         return http.build();

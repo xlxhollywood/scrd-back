@@ -5,6 +5,8 @@ services:
     image: ohsehun/spring-backend:latest
     container_name: spring-backend
     restart: always
+    ports:
+      - "8080:8080"
     networks:
     - app-network
 
@@ -36,7 +38,7 @@ services:
     volumes:
       - ./nginx/certbot:/etc/letsencrypt
       - ./nginx/certbot:/var/www/certbot
-    command: certonly --webroot --webroot-path=/var/www/certbot --email your@email.com --agree-tos --no-eff-email -d test.apiofpeg.com
+    command: certonly --webroot --webroot-path=/var/www/certbot --email saint0325@handong.ac.kr --agree-tos --no-eff-email -d test.apiofpeg.com
     networks:
       - app-network
 
