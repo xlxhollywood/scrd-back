@@ -1,5 +1,8 @@
 package org.example.scrd.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.example.scrd.controller.response.ApiResponse;
 import org.example.scrd.domain.Theme;
@@ -18,13 +21,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/scrd/api")
 @RequiredArgsConstructor
+@Tag(name = "Review", description = "리뷰 관리")
+@SecurityRequirement(name = "Bearer Authentication")
 public class ReviewController {
     private final ReviewService reviewService;
     private final ThemeService themeService;
 
-    /**
-     리뷰 등록 API
-     * */
+    @Operation(summary = "리뷰 등록", description = "특정 테마에 대한 리뷰를 등록합니다")
     @PostMapping("/review/{themeId}")
     public ResponseEntity<ApiResponse<Object>> addReview(
             @PathVariable Long themeId,
@@ -38,24 +41,21 @@ public class ReviewController {
 
 
 
-    /**
-     * 내가 쓴 리뷰 보기
-     * */
+    @Operation(summary = "내가 작성한 리뷰 조회", description = "현재 로그인한 사용자가 작성한 모든 리뷰를 조회합니다")
     @GetMapping("/review/my")
     public ResponseEntity<List<MyReviewResponseDto>> getReviewsByUser(@AuthenticationPrincipal User user) {
         List<MyReviewResponseDto> myReviews = reviewService.getReviewListByUser(user.getId());
         return ResponseEntity.ok(myReviews);
     }
 
-    /**
-     * 테마의  리뷰 보기
-     * */
+    @Operation(summary = "테마별 리뷰 조회", description = "특정 테마에 대한 모든 리뷰를 조회합니다")
     @GetMapping("/review/theme/{themeId}")
     public ResponseEntity<List<ThemeReviewResponseDto>> getReviewsByTheme(@PathVariable Long themeId){
         List<ThemeReviewResponseDto> themeReviews = reviewService.getReviewListByTheme(themeId);
         return ResponseEntity.ok(themeReviews);
     }
 
+    @Operation(summary = "리뷰 삭제", description = "내가 작성한 리뷰를 삭제합니다")
     @DeleteMapping("/review/{reviewId}")
     public ResponseEntity<ApiResponse<Object>> deleteReview(
             @PathVariable Long reviewId,
@@ -64,7 +64,7 @@ public class ReviewController {
         return ResponseEntity.ok(ApiResponse.success());
     }
 
-
+    @Operation(summary = "내 리뷰 작성 개수 조회", description = "현재 로그인한 사용자가 작성한 리뷰 개수를 조회합니다")
     @GetMapping("/review/count")
     public ResponseEntity<ApiResponse<Long>> countReviewsByAuthenticatedUser(
             @AuthenticationPrincipal User user) {
