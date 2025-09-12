@@ -1,4 +1,4 @@
-package org.example.scrd.controller.response;
+package org.example.scrd.dto.response;
 
 import lombok.Getter;
 import lombok.Setter;

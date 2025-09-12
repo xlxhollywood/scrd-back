@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.example.scrd.controller.response.ApiResponse;
+import org.example.scrd.dto.response.ApiResponse;
 import org.example.scrd.domain.User;
 import org.example.scrd.dto.request.UserProfileUpdateRequest;
 import org.example.scrd.dto.response.UserResponse;

@@ -4,10 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.example.scrd.controller.response.ApiResponse;
+import org.example.scrd.dto.response.ApiResponse;
 import org.example.scrd.domain.User;
 import org.example.scrd.dto.response.NotificationResponse;
-import org.example.scrd.exception.WrongTokenException;
 import org.example.scrd.service.NotificationService;
 import org.example.scrd.service.SseEmitterService;
 import org.example.scrd.util.JwtUtil;
@@ -18,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.List;
-
-import static javax.crypto.Cipher.SECRET_KEY;
 
 @RestController
 @RequiredArgsConstructor
