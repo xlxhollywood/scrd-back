@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
-import org.example.scrd.dto.AppleDto;
 import org.example.scrd.util.JwtUtil;
 import org.example.scrd.dto.UserDto;
 import org.example.scrd.controller.response.KakaoLoginResponse;

@@ -8,8 +8,8 @@ import org.example.scrd.controller.response.ApiResponse;
 import org.example.scrd.domain.Theme;
 import org.example.scrd.domain.User;
 import org.example.scrd.dto.response.MyReviewResponse;
-import org.example.scrd.dto.ReviewCreateRequestDto;
-import org.example.scrd.dto.ThemeReviewResponseDto;
+import org.example.scrd.dto.request.ReviewCreateRequest;
+import org.example.scrd.dto.response.ThemeReviewResponse;
 import org.example.scrd.dto.request.ReviewRequest;
 import org.example.scrd.service.ReviewService;
 import org.example.scrd.service.ThemeService;
@@ -35,7 +35,7 @@ public class ReviewController {
             @AuthenticationPrincipal User user) {
 
         Theme theme = themeService.getThemeById(themeId);
-        reviewService.addReview(ReviewCreateRequestDto.from(request), user.getId(), theme, request.getTagIds());
+        reviewService.addReview(ReviewCreateRequest.from(request), user.getId(), theme, request.getTagIds());
         return ResponseEntity.ok(ApiResponse.success());
     }
 
@@ -50,8 +50,8 @@ public class ReviewController {
 
     @Operation(summary = "테마별 리뷰 조회", description = "특정 테마에 대한 모든 리뷰를 조회합니다")
     @GetMapping("/review/theme/{themeId}")
-    public ResponseEntity<List<ThemeReviewResponseDto>> getReviewsByTheme(@PathVariable Long themeId){
-        List<ThemeReviewResponseDto> themeReviews = reviewService.getReviewListByTheme(themeId);
+    public ResponseEntity<List<ThemeReviewResponse>> getReviewsByTheme(@PathVariable Long themeId){
+        List<ThemeReviewResponse> themeReviews = reviewService.getReviewListByTheme(themeId);
         return ResponseEntity.ok(themeReviews);
     }
 

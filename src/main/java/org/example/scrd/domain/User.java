@@ -3,11 +3,8 @@ package org.example.scrd.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.scrd.BaseEntity;
-import org.example.scrd.dto.Tier;
+import org.example.scrd.domain.Tier;
 import org.example.scrd.dto.UserDto;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
-
 import java.util.ArrayList;
 import java.util.List;
 

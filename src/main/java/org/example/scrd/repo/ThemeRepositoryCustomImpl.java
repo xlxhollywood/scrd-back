@@ -3,17 +3,14 @@ package org.example.scrd.repo;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.example.scrd.domain.QReview;
 import org.example.scrd.domain.QTheme;
 import org.example.scrd.domain.Theme;
-import org.example.scrd.dto.LocationCountDto;
-import org.example.scrd.dto.ThemeDto;
+import org.example.scrd.dto.response.LocationCountResponse;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 public class ThemeRepositoryCustomImpl implements ThemeRepositoryCustom {
@@ -36,7 +33,6 @@ public class ThemeRepositoryCustomImpl implements ThemeRepositoryCustom {
                 )
                 .fetch();
     }
-
 
     @Override
     public List<Theme> findThemesByCriteria(
@@ -91,16 +87,13 @@ public class ThemeRepositoryCustomImpl implements ThemeRepositoryCustom {
                 .fetch();
     }
 
-
-
-
     @Override
-    public List<LocationCountDto> countThemesByLocation() {
+    public List<LocationCountResponse> countThemesByLocation() {
         QTheme theme = QTheme.theme;
 
         return queryFactory
                 .select(Projections.constructor(
-                        LocationCountDto.class,
+                        LocationCountResponse.class,
                         theme.location,
                         theme.count()
                 ))
@@ -109,8 +102,5 @@ public class ThemeRepositoryCustomImpl implements ThemeRepositoryCustom {
                 .orderBy(theme.count().desc())
                 .fetch();
     }
-
-
-
 
 }

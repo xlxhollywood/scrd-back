@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.scrd.BaseEntity;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

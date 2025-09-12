@@ -4,16 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.scrd.domain.Theme;
 import org.example.scrd.domain.ThemeDocument;
-import org.example.scrd.dto.LocationCountDto;
-import org.example.scrd.dto.MobileThemeDto;
-import org.example.scrd.dto.ThemeDto;
+import org.example.scrd.dto.response.LocationCountResponse;
+import org.example.scrd.dto.response.MobileThemeResponse;
+import org.example.scrd.dto.response.ThemeResponse;
 import org.example.scrd.exception.NotFoundException;
 import org.example.scrd.repo.ThemeMongoRepository;
 import org.example.scrd.repo.ThemeRepository;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,12 +25,12 @@ public class ThemeService {
     private final ThemeRepository themeRepository;
     private final ThemeMongoRepository themeMongoRepository;
 
-    public void addTheme(ThemeDto dto){
+    public void addTheme(ThemeResponse dto){
         themeRepository.save(Theme.from(dto));
     }
 
     @Transactional
-    public void updateTheme(Long themeId, ThemeDto dto) {
+    public void updateTheme(Long themeId, ThemeResponse dto) {
         Theme theme =
                 themeRepository.findById(themeId).orElseThrow(() -> new NotFoundException("방탈출 주제가 존재하지 않습니다."));
         theme.update(dto);
@@ -45,11 +42,11 @@ public class ThemeService {
     }
 
     //DB에서 모든 Theme 엔티티를 꺼내서, 각 항목을 ThemeDto로 변환한 다음, 그걸 리스트로 만들어서 반환한다.
-    public List<ThemeDto> getAllThemes() {
+    public List<ThemeResponse> getAllThemes() {
         List<Theme> themes = themeRepository.findAll();
         return themes
             .stream()
-            .map(ThemeDto::toDto)
+            .map(ThemeResponse::toDto)
             .collect(Collectors.toList());
     }
 
@@ -60,15 +57,15 @@ public class ThemeService {
                 .getAvailableTimes();
     }
 
-    public List<ThemeDto> getThemesSortedByRating() {
+    public List<ThemeResponse> getThemesSortedByRating() {
         return themeRepository.findThemesOrderByReviewCountAndRating().stream()
-                .map(ThemeDto::toDto)
+                .map(ThemeResponse::toDto)
                 .collect(Collectors.toList());
     }
 
     @Cacheable(value = "themes", key = "'first-page-default'",
             condition = "#page == 0 && #keyword == null && #horror == null && #activity == null && #levelMin == null && #levelMax == null && #location == null && #date == null && #sort == 'combined'")
-    public List<MobileThemeDto> getThemesByFilterCriteria(
+    public List<MobileThemeResponse> getThemesByFilterCriteria(
             String keyword,
             Integer horror,
             Integer activity,
@@ -87,11 +84,11 @@ public class ThemeService {
 
         String dateString = date != null ? date.toString() : LocalDate.now().toString();
 
-        List<MobileThemeDto> result = themes.stream().map(theme -> {
+        List<MobileThemeResponse> result = themes.stream().map(theme -> {
             List<String> availableTimes = themeMongoRepository.findByThemeIdAndDate(theme.getId().intValue(), dateString)
                     .map(ThemeDocument::getAvailableTimes)
                     .orElse(Collections.emptyList());
-            return MobileThemeDto.from(theme, availableTimes);
+            return MobileThemeResponse.from(theme, availableTimes);
         }).collect(Collectors.toList());
 
         return result;
@@ -99,7 +96,7 @@ public class ThemeService {
 
 
     public Map<String, Object> getLocationCountsWithTotal() {
-        List<LocationCountDto> counts = themeRepository.countThemesByLocation();
+        List<LocationCountResponse> counts = themeRepository.countThemesByLocation();
         int total = counts.stream()
                 .mapToInt(c -> c.getCount().intValue())
                 .sum();
@@ -110,8 +107,5 @@ public class ThemeService {
         result.put("counts", counts);
         return result;
     }
-
-
-
 
 }

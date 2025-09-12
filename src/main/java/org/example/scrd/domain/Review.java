@@ -3,7 +3,7 @@ package org.example.scrd.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.scrd.BaseEntity;
-import org.example.scrd.dto.ReviewCreateRequestDto;
+import org.example.scrd.dto.request.ReviewCreateRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +41,7 @@ public class Review extends BaseEntity {
     private List<ReviewTagMap> tagMaps = new ArrayList<>();
 
 
-    public static Review addReviewFrom(User user, ReviewCreateRequestDto dto, Theme theme) {
+    public static Review addReviewFrom(User user, ReviewCreateRequest dto, Theme theme) {
         Review review =
                 Review.builder()
                         .user(user.addReviewFrom(user))

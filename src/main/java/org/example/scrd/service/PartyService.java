@@ -2,9 +2,9 @@ package org.example.scrd.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.scrd.domain.*;
-import org.example.scrd.dto.PartyJoinDto;
-import org.example.scrd.dto.PartyPostDetailDto;
-import org.example.scrd.dto.PartyPostDto;
+import org.example.scrd.dto.response.PartyJoinResponse;
+import org.example.scrd.dto.response.PartyPostDetailReseponse;
+import org.example.scrd.dto.response.PartyPostResponse;
 import org.example.scrd.dto.request.PartyPostRequest;
 import org.example.scrd.exception.AlreadyJoinedException;
 import org.example.scrd.exception.NotFoundException;
@@ -176,15 +176,15 @@ public class PartyService {
         postRepository.delete(post);
     }
 
-    public List<PartyPostDto> getPartyPostsPaged(int page, int size, LocalDate deadline, Boolean isClosed) {
+    public List<PartyPostResponse> getPartyPostsPaged(int page, int size, LocalDate deadline, Boolean isClosed) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "regDate"));
         return postRepository.findByConditions(deadline, isClosed, pageable)
                 .stream()
-                .map(PartyPostDto::from)
+                .map(PartyPostResponse::from)
                 .collect(Collectors.toList());
     }
 
-    public PartyPostDetailDto getPartyPostDetail(Long postId, User user) {
+    public PartyPostDetailReseponse getPartyPostDetail(Long postId, User user) {
         PartyPost post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException("일행 글 없음"));
 
@@ -192,23 +192,23 @@ public class PartyService {
         PartyJoin join = joinRepository.findByPartyPostAndUser(post, user).orElse(null);
         String status = (join != null) ? join.getStatus().name() : null;
 
-        return PartyPostDetailDto.from(post, status);
+        return PartyPostDetailReseponse.from(post, status);
     }
 
 
     @Transactional(readOnly = true)
-    public List<PartyJoinDto> getJoinRequestsByWriter(Long writerId) {
+    public List<PartyJoinResponse> getJoinRequestsByWriter(Long writerId) {
         List<PartyJoin> joins = joinRepository.findAllByWriterId(writerId);
         return joins.stream()
-                .map(PartyJoinDto::from)
+                .map(PartyJoinResponse::from)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public List<PartyJoinDto> getMyResolvedJoins(Long userId) {
+    public List<PartyJoinResponse> getMyResolvedJoins(Long userId) {
         List<PartyJoin> joins = joinRepository.findAllByUserIdAndStatusNotPending(userId);
         return joins.stream()
-                .map(PartyJoinDto::from)
+                .map(PartyJoinResponse::from)
                 .collect(Collectors.toList());
     }
 

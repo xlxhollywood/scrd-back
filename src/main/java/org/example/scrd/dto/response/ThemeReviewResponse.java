@@ -1,4 +1,4 @@
-package org.example.scrd.dto;
+package org.example.scrd.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 @Getter
 @AllArgsConstructor
-public class ThemeReviewResponseDto {
+public class ThemeReviewResponse {
     private Long userId;
     private String userTier;
     private String nickName;
@@ -29,12 +29,12 @@ public class ThemeReviewResponseDto {
     private String clearTime;
 
 // 리뷰 가져오기용 Dto
-public static ThemeReviewResponseDto from(Review review) {
+public static ThemeReviewResponse from(Review review) {
     List<String> tagNames = review.getTagMaps().stream()
             .map(tagMap -> tagMap.getTag().getTagName())
             .toList();
 
-    return ThemeReviewResponseDto.builder()
+    return ThemeReviewResponse.builder()
             .userId(review.getUser().getId())
             .userTier(review.getUser().getTier().getTierE()) // <- 여기 수정
             .nickName(review.getUser().getNickName())

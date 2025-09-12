@@ -3,8 +3,8 @@ package org.example.scrd.service;
 import lombok.RequiredArgsConstructor;
 import org.example.scrd.domain.*;
 import org.example.scrd.dto.response.MyReviewResponse;
-import org.example.scrd.dto.ReviewCreateRequestDto;
-import org.example.scrd.dto.ThemeReviewResponseDto;
+import org.example.scrd.dto.request.ReviewCreateRequest;
+import org.example.scrd.dto.response.ThemeReviewResponse;
 import org.example.scrd.exception.NotFoundException;
 import org.example.scrd.exception.UnauthorizedAccessException;
 import org.example.scrd.repo.*;
@@ -24,7 +24,7 @@ public class ReviewService {
     private final ReviewTagMapRepository reviewTagMapRepository;
 
     @Transactional
-    public void addReview(ReviewCreateRequestDto dto, Long userId, Theme theme, List<Long> tagIds) {
+    public void addReview(ReviewCreateRequest dto, Long userId, Theme theme, List<Long> tagIds) {
         // 기존 리뷰 저장 로직 유지
         Review review = Review.addReviewFrom(
                 userRepository.findById(userId)
@@ -59,10 +59,10 @@ public class ReviewService {
                 .collect(Collectors.toList());
     }
 
-    public List<ThemeReviewResponseDto> getReviewListByTheme(Long themeId) {
+    public List<ThemeReviewResponse> getReviewListByTheme(Long themeId) {
         return reviewRepository.findByThemeId(themeId)
                 .stream()
-                .map(ThemeReviewResponseDto::from)
+                .map(ThemeReviewResponse::from)
                 .collect(Collectors.toList());
     }
 

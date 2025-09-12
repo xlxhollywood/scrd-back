@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.example.scrd.BaseEntity;
 import org.example.scrd.dto.request.PartyCommentRequest;
-
 import java.util.ArrayList;
 import java.util.List;
 

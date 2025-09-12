@@ -1,15 +1,13 @@
-package org.example.scrd.dto;
+package org.example.scrd.dto.request;
 
 import lombok.Builder;
 import lombok.Getter;
-import org.example.scrd.domain.Review;
-import org.example.scrd.domain.Theme;
-import org.example.scrd.dto.request.ReviewRequest;
+
 import java.util.List;
 
 @Builder
 @Getter
-public class ReviewCreateRequestDto {
+public class ReviewCreateRequest {
 
     private String userTier;
     private String nickName;
@@ -25,8 +23,8 @@ public class ReviewCreateRequestDto {
     private String clearTime;
 
     // 리뷰 등록용 Dto
-    public static ReviewCreateRequestDto from(ReviewRequest request) {
-        return ReviewCreateRequestDto.builder()
+    public static ReviewCreateRequest from(ReviewRequest request) {
+        return ReviewCreateRequest.builder()
                 .text(request.getText())
                 .level(request.getLevel())
                 .stars(request.getStars())

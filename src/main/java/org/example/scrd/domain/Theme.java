@@ -6,8 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.scrd.BaseEntity;
-import org.example.scrd.dto.ThemeDto;
-
+import org.example.scrd.dto.response.ThemeResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +46,7 @@ public class Theme extends BaseEntity {
     private List<SavedTheme> saved = new ArrayList<>();
 
 
-    public static Theme from(ThemeDto dto){
+    public static Theme from(ThemeResponse dto){
         return Theme.builder()
                 .title(dto.getTitle())
                 .description(dto.getDescription())
@@ -61,7 +60,7 @@ public class Theme extends BaseEntity {
                 .build();
     }
 
-    public void update(ThemeDto dto) {
+    public void update(ThemeResponse dto) {
         this.title = dto.getTitle();
         this.description = dto.getDescription();
         this.location = dto.getLocation();

@@ -3,8 +3,7 @@ package org.example.scrd.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.scrd.domain.User;
-import org.example.scrd.dto.AppleDto;
-import org.example.scrd.dto.Tier;
+import org.example.scrd.domain.Tier;
 import org.example.scrd.dto.UserDto;
 import org.example.scrd.repo.UserRepository;
 import org.springframework.stereotype.Service;

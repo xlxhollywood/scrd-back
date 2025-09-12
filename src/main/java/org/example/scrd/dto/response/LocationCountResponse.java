@@ -1,11 +1,11 @@
-package org.example.scrd.dto;
+package org.example.scrd.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class LocationCountDto {
+public class LocationCountResponse {
     private String location;
     private Long count;
 }

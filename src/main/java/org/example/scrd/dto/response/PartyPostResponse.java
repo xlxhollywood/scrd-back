@@ -1,4 +1,4 @@
-package org.example.scrd.dto;
+package org.example.scrd.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
-public class PartyPostDto {
+public class PartyPostResponse {
 
     private Long id;
 
@@ -22,8 +22,8 @@ public class PartyPostDto {
     private int currentParticipants;
     private int maxParticipants;
 
-    public static PartyPostDto from(PartyPost post) {
-        return PartyPostDto.builder()
+    public static PartyPostResponse from(PartyPost post) {
+        return PartyPostResponse.builder()
                 .id(post.getId())
                 .image(post.getTheme().getImage())
                 .title(post.getTitle())

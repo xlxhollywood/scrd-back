@@ -4,13 +4,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.example.scrd.dto.LocationCountDto;
-import org.example.scrd.dto.MobileThemeDto;
-import org.example.scrd.dto.ThemeDto;
+import org.example.scrd.dto.response.MobileThemeResponse;
+import org.example.scrd.dto.response.ThemeResponse;
 import org.example.scrd.dto.request.ThemeRequest;
 import org.example.scrd.dto.response.ThemeAvailableTimeResponse;
 import org.example.scrd.service.ThemeService;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,30 +31,30 @@ public class ThemeController {
     @Operation(summary = "테마 등록 (관리자)", description = "새로운 방탈출 테마를 등록합니다")
     @PostMapping("/theme")
     public ResponseEntity<Void> addTheme(@RequestBody ThemeRequest request){
-        themeService.addTheme(ThemeDto.from(request));
+        themeService.addTheme(ThemeResponse.from(request));
         return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "테마 수정 (관리자)", description = "기존 테마 정보를 수정합니다")
     @PutMapping("/theme/{themeId}")
     public ResponseEntity<Void> updateTheme(@PathVariable Long themeId, @RequestBody ThemeRequest request){
-        themeService.updateTheme(themeId, ThemeDto.from(request));
+        themeService.updateTheme(themeId, ThemeResponse.from(request));
         return ResponseEntity.ok().build();
     }
 
 
     @Operation(summary = "테마 상세 조회", description = "특정 테마의 상세 정보를 조회합니다")
     @GetMapping("/theme/{themeId}")
-    public ResponseEntity<ThemeDto> getTheme(@PathVariable Long themeId) {
-        ThemeDto theme = ThemeDto.toDto(themeService.getThemeById(themeId));
+    public ResponseEntity<ThemeResponse> getTheme(@PathVariable Long themeId) {
+        ThemeResponse theme = ThemeResponse.toDto(themeService.getThemeById(themeId));
         return ResponseEntity.ok(theme);
     }
 
 
     @Operation(summary = "웹용 테마 상세 조회", description = "웹 전용 테마 상세 정보를 조회합니다")
     @GetMapping("web/theme/{themeId}")
-    public ResponseEntity<ThemeDto> getThemeDetail (@PathVariable Long themeId) {
-        ThemeDto theme = ThemeDto.toWebDto(themeService.getThemeById(themeId));
+    public ResponseEntity<ThemeResponse> getThemeDetail (@PathVariable Long themeId) {
+        ThemeResponse theme = ThemeResponse.toWebDto(themeService.getThemeById(themeId));
         return ResponseEntity.ok(theme);
     }
 
@@ -74,8 +72,8 @@ public class ThemeController {
 
     @Operation(summary = "테마 목록 조회", description = "모든 테마 목록을 조회합니다. 정렬 옵션을 지정할 수 있습니다")
     @GetMapping("/theme")
-    public ResponseEntity<List<ThemeDto>> getThemes(@RequestParam(required = false) String sort) {
-        List<ThemeDto> themes;
+    public ResponseEntity<List<ThemeResponse>> getThemes(@RequestParam(required = false) String sort) {
+        List<ThemeResponse> themes;
         if ("rating".equalsIgnoreCase(sort)) {
             themes = themeService.getThemesSortedByRating();
         } else {
@@ -89,7 +87,7 @@ public class ThemeController {
 
     @Operation(summary = "테마 필터링 검색", description = "다양한 조건으로 테마를 필터링하여 검색합니다")
     @GetMapping("/theme/filter")
-    public ResponseEntity<List<MobileThemeDto>> getThemesWithFiltersAndSorting(
+    public ResponseEntity<List<MobileThemeResponse>> getThemesWithFiltersAndSorting(
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) Integer horror,
             @RequestParam(required = false) Integer activity,
@@ -101,7 +99,7 @@ public class ThemeController {
             @RequestParam(defaultValue = "20") int size,
             @RequestParam(defaultValue = "combined") String sort
     ) {
-        List<MobileThemeDto> results = themeService.getThemesByFilterCriteria(
+        List<MobileThemeResponse> results = themeService.getThemesByFilterCriteria(
                 keyword, horror, activity, levelMin, levelMax, location, date, page, size, sort
         );
         return ResponseEntity.ok(results);

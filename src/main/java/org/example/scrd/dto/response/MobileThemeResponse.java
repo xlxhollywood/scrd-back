@@ -1,4 +1,4 @@
-package org.example.scrd.dto;
+package org.example.scrd.dto.response;
 
 import lombok.Builder;
 import org.example.scrd.domain.Theme;
@@ -6,12 +6,12 @@ import org.example.scrd.domain.Theme;
 import java.io.Serializable;
 import java.util.List;
 
-public class MobileThemeDto extends ThemeDto implements Serializable {
+public class MobileThemeResponse extends ThemeResponse implements Serializable {
     private static final long serialVersionUID = 1L;
     private List<String> availableTimes;
 
     @Builder(builderMethodName = "mobileBuilder")
-    public MobileThemeDto(Theme theme, List<String> availableTimes) {
+    public MobileThemeResponse(Theme theme, List<String> availableTimes) {
         super(
                 theme.getId(),
                 theme.getTitle(),
@@ -33,8 +33,8 @@ public class MobileThemeDto extends ThemeDto implements Serializable {
         this.availableTimes = availableTimes;
     }
 
-    public static MobileThemeDto from(Theme theme, List<String> availableTimes) {
-        return MobileThemeDto.mobileBuilder()
+    public static MobileThemeResponse from(Theme theme, List<String> availableTimes) {
+        return MobileThemeResponse.mobileBuilder()
                 .theme(theme)
                 .availableTimes(availableTimes)
                 .build();

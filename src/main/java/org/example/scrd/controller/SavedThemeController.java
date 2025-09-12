@@ -5,8 +5,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.example.scrd.domain.User;
-import org.example.scrd.dto.MobileThemeDto;
-import org.example.scrd.dto.response.SavedThemeListResponse;
+import org.example.scrd.dto.response.MobileThemeResponse;
 import org.example.scrd.dto.response.SavedThemeResponse;
 import org.example.scrd.service.SavedThemeService;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -27,12 +26,12 @@ public class SavedThemeController {
 
     @Operation(summary = "찜한 테마 목록 조회", description = "내가 찜한 테마 목록을 예약 가능 시간과 함께 조회합니다")
     @GetMapping
-    public ResponseEntity<List<MobileThemeDto>> getSavedThemesWithTimes(
+    public ResponseEntity<List<MobileThemeResponse>> getSavedThemesWithTimes(
             @AuthenticationPrincipal User user,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
     ) {
         LocalDate targetDate = (date != null) ? date : LocalDate.now();
-        List<MobileThemeDto> savedThemes = savedThemeService.getSavedThemesWithAvailableTimes(user.getId(), targetDate);
+        List<MobileThemeResponse> savedThemes = savedThemeService.getSavedThemesWithAvailableTimes(user.getId(), targetDate);
         return ResponseEntity.ok(savedThemes);
     }
 

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.scrd.domain.SavedTheme;
 import org.example.scrd.domain.Theme;
 import org.example.scrd.domain.User;
-import org.example.scrd.dto.MobileThemeDto;
+import org.example.scrd.dto.response.MobileThemeResponse;
 import org.example.scrd.dto.response.SavedThemeListResponse;
 import org.example.scrd.dto.response.SavedThemeResponse;
 import org.example.scrd.exception.NotFoundException;
@@ -60,7 +60,7 @@ public class SavedThemeService {
     }
 
     @Transactional(readOnly = true)
-    public List<MobileThemeDto> getSavedThemesWithAvailableTimes(Long userId, LocalDate date) {
+    public List<MobileThemeResponse> getSavedThemesWithAvailableTimes(Long userId, LocalDate date) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("유저 없음"));
 
@@ -76,7 +76,7 @@ public class SavedThemeService {
                             .map(ThemeDocument::getAvailableTimes)
                             .orElse(Collections.emptyList());
 
-                    return MobileThemeDto.from(theme, availableTimes);
+                    return MobileThemeResponse.from(theme, availableTimes);
                 })
                 .toList();
     }

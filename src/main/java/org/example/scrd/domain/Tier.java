@@ -1,4 +1,4 @@
-package org.example.scrd.dto;
+package org.example.scrd.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

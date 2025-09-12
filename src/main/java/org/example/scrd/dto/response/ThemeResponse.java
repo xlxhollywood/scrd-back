@@ -1,6 +1,5 @@
-package org.example.scrd.dto;
+package org.example.scrd.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,7 +13,7 @@ import java.io.Serializable;
 @Builder
 @Getter
 @AllArgsConstructor
-public class ThemeDto implements Serializable {
+public class ThemeResponse implements Serializable {
     private static final long serialVersionUID = 1L;
     private Long id;
     private String title;
@@ -33,8 +32,8 @@ public class ThemeDto implements Serializable {
     private Float level; // 테마 난이도
     private Integer reviewCount; // 테마의 리뷰 개수
 
-    public static ThemeDto from(ThemeRequest request){
-        return ThemeDto.builder()
+    public static ThemeResponse from(ThemeRequest request){
+        return ThemeResponse.builder()
                 .title(request.getTitle())
                 .description(request.getDescription())
                 .location(request.getLocation())
@@ -48,8 +47,8 @@ public class ThemeDto implements Serializable {
     }
 
     // 테마를 받아서 Dto 로
-    public static ThemeDto toDto(Theme theme) {
-        return ThemeDto.builder()
+    public static ThemeResponse toDto(Theme theme) {
+        return ThemeResponse.builder()
                 .id(theme.getId())
                 .title(theme.getTitle())
                 .description(theme.getDescription())
@@ -68,8 +67,8 @@ public class ThemeDto implements Serializable {
                 .build();
     }
 
-    public static ThemeDto toWebDto(Theme theme) {
-        return ThemeDto.builder()
+    public static ThemeResponse toWebDto(Theme theme) {
+        return ThemeResponse.builder()
                 .id(theme.getId())
                 .title(theme.getTitle())
                 .description(theme.getDescription())

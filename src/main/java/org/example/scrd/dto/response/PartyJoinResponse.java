@@ -1,30 +1,29 @@
-package org.example.scrd.dto;
+package org.example.scrd.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.example.scrd.domain.PartyJoin;
-import org.example.scrd.domain.PartyPost;
 
 import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
-public class PartyJoinDto {
+public class PartyJoinResponse {
     private Long joinId;
     private Long userId;
     private String username;
     private String status;
-    private LocalDateTime regDate; // ✅ 이걸 생성자에도 포함시켜야 함
+    private LocalDateTime regDate;
     private Long postId;
     private String postTitle;
 
-    public static PartyJoinDto from(PartyJoin join) {
-        return new PartyJoinDto(
+    public static PartyJoinResponse from(PartyJoin join) {
+        return new PartyJoinResponse(
                 join.getId(),
                 join.getUser().getId(),
                 join.getUser().getNickName(),
                 join.getStatus().name(),
-                join.getRegDate(),                           // ✅ 누락되었던 regDate 추가
+                join.getRegDate(),
                 join.getPartyPost().getId(),
                 join.getPartyPost().getTitle()
         );

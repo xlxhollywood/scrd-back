@@ -1,4 +1,4 @@
-package org.example.scrd.dto;
+package org.example.scrd.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
-public class PartyPostDetailDto {
+public class PartyPostDetailReseponse {
 
     //  PartyPost 정보
     private Long postId;
@@ -42,11 +42,11 @@ public class PartyPostDetailDto {
     // 유저가 이미 참여한 테마인지 아닌지 알기 위한 필드
     private String joinStatus;
 
-    public static PartyPostDetailDto from(PartyPost post, String joinStatus) {
+    public static PartyPostDetailReseponse from(PartyPost post, String joinStatus) {
         Theme theme = post.getTheme();
         User writer = post.getWriter();
 
-        return PartyPostDetailDto.builder()
+        return PartyPostDetailReseponse.builder()
                 .postId(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())

@@ -3,7 +3,7 @@ package org.example.scrd.dto.response;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.scrd.domain.User;
-import org.example.scrd.dto.Tier;
+import org.example.scrd.domain.Tier;
 
 @NoArgsConstructor
 @Getter
