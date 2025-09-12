@@ -64,6 +64,16 @@ public class PartyController {
         return ResponseEntity.ok(ApiResponse.success(id));
     }
 
+    @Operation(summary = "일행 모집 글 삭제", description = "내가 작성한 일행 모집 글을 삭제합니다")
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<ApiResponse<Object>> deletePartyPost(
+            @PathVariable Long postId,
+            @AuthenticationPrincipal User user
+    ) {
+        partyService.deletePartyPost(postId, user);
+        return ResponseEntity.ok(ApiResponse.success());
+    }
+
 
     @Operation(summary = "일행 참여 신청", description = "일행 모집 글에 참여를 신청합니다")
     @PostMapping("/{PartyPostId}/join")
@@ -74,20 +84,21 @@ public class PartyController {
         return ResponseEntity.ok(ApiResponse.success());
     }
 
+    @Operation(summary = "일행 참여 신청 취소", description = "내가 신청한 일행 참여를 취소합니다")
+    @DeleteMapping("/{postId}/join")
+    public ResponseEntity<ApiResponse<Object>> cancelJoin(
+            @PathVariable Long postId,
+            @AuthenticationPrincipal User user
+    ) {
+        partyService.cancelJoin(postId, user.getId());
+        return ResponseEntity.ok(ApiResponse.success());
+    }
 
     @Operation(summary = "받은 참여 신청 조회", description = "내가 작성한 모집 글에 대한 참여 신청 목록을 조회합니다 (파티장용)")
     @GetMapping("/join/notification")
     public ResponseEntity<ApiResponse<List<PartyJoinDto>>> getJoinRequestsByWriter(
             @AuthenticationPrincipal User user) {
         List<PartyJoinDto> joins = partyService.getJoinRequestsByWriter(user.getId());
-        return ResponseEntity.ok(ApiResponse.success(joins));
-    }
-
-    @Operation(summary = "내 참여 신청 상태 조회", description = "내가 신청한 일행의 승인/거절 상태를 조회합니다")
-    @GetMapping("/join/status")
-    public ResponseEntity<ApiResponse<List<PartyJoinDto>>> getMyJoinStatus(
-            @AuthenticationPrincipal User user) {
-        List<PartyJoinDto> joins = partyService.getMyResolvedJoins(user.getId());
         return ResponseEntity.ok(ApiResponse.success(joins));
     }
 
@@ -100,24 +111,12 @@ public class PartyController {
         return ResponseEntity.ok(ApiResponse.success());
     }
 
-    @Operation(summary = "일행 모집 글 삭제", description = "내가 작성한 일행 모집 글을 삭제합니다")
-    @DeleteMapping("/{postId}")
-    public ResponseEntity<ApiResponse<Object>> deletePartyPost(
-            @PathVariable Long postId,
-            @AuthenticationPrincipal User user
-    ) {
-        partyService.deletePartyPost(postId, user); // ✅ 그냥 user 전체 넘기는 것도 깔끔
-        return ResponseEntity.ok(ApiResponse.success());
-    }
-
-    @Operation(summary = "일행 참여 신청 취소", description = "내가 신청한 일행 참여를 취소합니다")
-    @DeleteMapping("/{postId}/join")
-    public ResponseEntity<ApiResponse<Object>> cancelJoin(
-            @PathVariable Long postId,
-            @AuthenticationPrincipal User user
-    ) {
-        partyService.cancelJoin(postId, user.getId());
-        return ResponseEntity.ok(ApiResponse.success());
+    @Operation(summary = "내 참여 신청 상태 조회", description = "내가 신청한 일행의 승인/거절 상태를 조회합니다")
+    @GetMapping("/join/status")
+    public ResponseEntity<ApiResponse<List<PartyJoinDto>>> getMyJoinStatus(
+            @AuthenticationPrincipal User user) {
+        List<PartyJoinDto> joins = partyService.getMyResolvedJoins(user.getId());
+        return ResponseEntity.ok(ApiResponse.success(joins));
     }
 
 }
