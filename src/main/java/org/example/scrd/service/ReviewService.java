@@ -2,7 +2,7 @@ package org.example.scrd.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.scrd.domain.*;
-import org.example.scrd.dto.response.MyReviewResponseDto;
+import org.example.scrd.dto.response.MyReviewResponse;
 import org.example.scrd.dto.ReviewCreateRequestDto;
 import org.example.scrd.dto.ThemeReviewResponseDto;
 import org.example.scrd.exception.NotFoundException;
@@ -52,10 +52,10 @@ public class ReviewService {
         }
     }
 
-    public List<MyReviewResponseDto> getReviewListByUser(Long userId) {
+    public List<MyReviewResponse> getReviewListByUser(Long userId) {
         return reviewRepository.findByUserId(userId)
                 .stream()
-                .map(MyReviewResponseDto::from)
+                .map(MyReviewResponse::from)
                 .collect(Collectors.toList());
     }
 

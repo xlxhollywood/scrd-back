@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.scrd.controller.response.ApiResponse;
 import org.example.scrd.domain.Theme;
 import org.example.scrd.domain.User;
-import org.example.scrd.dto.response.MyReviewResponseDto;
+import org.example.scrd.dto.response.MyReviewResponse;
 import org.example.scrd.dto.ReviewCreateRequestDto;
 import org.example.scrd.dto.ThemeReviewResponseDto;
 import org.example.scrd.dto.request.ReviewRequest;
@@ -43,8 +43,8 @@ public class ReviewController {
 
     @Operation(summary = "내가 작성한 리뷰 조회", description = "현재 로그인한 사용자가 작성한 모든 리뷰를 조회합니다")
     @GetMapping("/review/my")
-    public ResponseEntity<List<MyReviewResponseDto>> getReviewsByUser(@AuthenticationPrincipal User user) {
-        List<MyReviewResponseDto> myReviews = reviewService.getReviewListByUser(user.getId());
+    public ResponseEntity<List<MyReviewResponse>> getReviewsByUser(@AuthenticationPrincipal User user) {
+        List<MyReviewResponse> myReviews = reviewService.getReviewListByUser(user.getId());
         return ResponseEntity.ok(myReviews);
     }
 

@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 @Builder
 @Getter
-public class MyReviewResponseDto {
+public class MyReviewResponse {
     private String userTier;
     private String nickName;
     private Long id;
@@ -31,14 +31,14 @@ public class MyReviewResponseDto {
     private String themeImage;
 
 
-    public static MyReviewResponseDto from(Review review) {
+    public static MyReviewResponse from(Review review) {
         List<String> tagNames = review.getTagMaps().stream()
                 .map(tagMap -> tagMap.getTag().getTagName())
                 .toList();
 
         Theme theme = review.getTheme(); // Review -> Theme 연관관계
 
-        return MyReviewResponseDto.builder()
+        return MyReviewResponse.builder()
                 .userTier(review.getUser().getTier().getTierE())
                 .nickName(review.getUser().getNickName())
                 .id(review.getId())
