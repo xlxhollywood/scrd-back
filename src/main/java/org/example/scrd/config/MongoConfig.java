@@ -11,28 +11,38 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
+import org.springframework.beans.factory.annotation.Value;
+
+import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class MongoConfig {
 
     @Bean
-    // MongoDB 클러스터 연결 설정
-    public MongoClient mongoClient() {
-        ConnectionString connectionString = new ConnectionString("mongodb+srv://admin:wntkfkd11!@cluster0.fvzvl.mongodb.net/scrd?retryWrites=true&w=majority&tls=true");
+    public MongoClient mongoClient(
+            @Value("${spring.data.mongodb.uri}") String uri,
+            // DB명이 URI에 없다면 이 값이 사용됩니다. 있으면 아래 factory에서 무시 또는 동일 값 사용.
+            @Value("${spring.data.mongodb.database:scrd}") String databaseName
+    ) {
+        ConnectionString cs = new ConnectionString(uri);
 
         MongoClientSettings settings = MongoClientSettings.builder()
-                .applyConnectionString(connectionString)
+                // URI 우선 적용
+                .applyConnectionString(cs)
+                // Stable API (Atlas V1)
                 .serverApi(ServerApi.builder().version(ServerApiVersion.V1).build())
-                .applyToSocketSettings(builder ->
-                        builder.connectTimeout(10_000, java.util.concurrent.TimeUnit.MILLISECONDS)  // 연결 타임아웃 10초
-                                .readTimeout(30_000, java.util.concurrent.TimeUnit.MILLISECONDS))   // 읽기 타임아웃 30초
-                .applyToClusterSettings(builder ->
-                        builder.serverSelectionTimeout(10_000, java.util.concurrent.TimeUnit.MILLISECONDS)) // 서버 선택 타임아웃 10초
+                // 앱 소켓 타임아웃 (URI에 없어도 여기서 커버)
+                .applyToSocketSettings(b -> b
+                        .connectTimeout(15, TimeUnit.SECONDS)
+                        .readTimeout(60, TimeUnit.SECONDS))
+                // 클러스터 서버 선택 타임아웃
+                .applyToClusterSettings(b -> b
+                        .serverSelectionTimeout(15, TimeUnit.SECONDS))
                 .build();
-
 
         return MongoClients.create(settings);
     }
+
 
     @Bean
     // MongoDatabaseFactory 연결된 DB 인스턴스 생성 (DB 선택 포함)
