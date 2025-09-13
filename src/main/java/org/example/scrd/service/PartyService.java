@@ -176,6 +176,7 @@ public class PartyService {
         postRepository.delete(post);
     }
 
+    @Transactional(readOnly = true)
     public List<PartyPostResponse> getPartyPostsPaged(int page, int size, LocalDate deadline, Boolean isClosed) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "regDate"));
         return postRepository.findByConditions(deadline, isClosed, pageable)

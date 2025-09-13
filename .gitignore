@@ -43,6 +43,6 @@ application.yml
 nginx/certbot/
 *.pem
 *.key
-
+*.sql
 *.p8
 

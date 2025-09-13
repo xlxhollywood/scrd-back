@@ -26,15 +26,15 @@ public class PartyCommentService {
     @Transactional
     public void addComment(Long userId, PartyCommentRequest request) {
         PartyPost post = postRepository.findById(request.getPostId())
-                .orElseThrow(() -> new RuntimeException("게시글 없음"));
+                .orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없습니다."));
         User writer = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("유저 없음"));
+                .orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
 
         // 대댓글 확인
         PartyComment parent = null;
         if (request.getParentId() != null) {
             parent = commentRepository.findById(request.getParentId())
-                    .orElseThrow(() -> new RuntimeException("부모 댓글 없음"));
+                    .orElseThrow(() -> new NotFoundException("부모 댓글을 찾을 수 없습니다."));
         }
 
         PartyComment comment = PartyComment.builder()

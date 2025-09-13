@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "users") // H2에서 user는 예약어라서 users로 변경
 @Setter
 @Getter
 @Builder

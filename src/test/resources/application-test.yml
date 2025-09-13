@@ -1,0 +1,77 @@
+spring:
+  # 테스트용 데이터베이스 설정
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL;DATABASE_TO_UPPER=false
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+    # 스키마 초기화 스크립트 비활성화
+    # schema: classpath:schema.sql
+  
+  # JPA 설정
+  jpa:
+    hibernate:
+      ddl-auto: create-drop  # 테스트용으로 테이블을 자동 생성/삭제
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+        # H2에서 예약어 문제 해결
+        globally_quoted_identifiers: true
+        # 테이블명 매핑 설정
+        naming:
+          physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  
+  # MongoDB 테스트 설정 (테스트용 인메모리 MongoDB) - 비활성화
+  # data:
+  #   mongodb:
+  #     host: localhost
+  #     port: 27017
+  #     database: scrd_test
+  
+  # Redis 테스트 설정 - 비활성화
+  # redis:
+  #   host: localhost
+  #   port: 6379
+  #   database: 1
+  #   timeout: 2000ms
+  #   lettuce:
+  #     pool:
+  #       max-active: 8
+  #       max-idle: 8
+  #       min-idle: 0
+
+  # Redis 자동 설정 비활성화
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
+
+# JWT 설정
+custom:
+  jwt:
+    secret: "dGVzdC1zZWNyZXQta2V5LWZvci1pbnRlZ3JhdGlvbi10ZXN0aW5nLW9ubHk="
+    expire-time-ms: 3600000  # 1시간
+    refresh-expire-time-ms: 604800000  # 7일
+
+# 카카오 API 설정 (테스트용)
+kakao:
+  client-id: test-client-id
+  client-secret: test-client-secret
+  redirect-uri: http://localhost:8080/api/auth/kakao/callback
+
+# 애플 API 설정 (테스트용)
+apple:
+  client-id: test-apple-client-id
+  team-id: test-team-id
+  key-id: test-key-id
+  private-key-path: classpath:key/test-key.p8
+
+# 로깅 설정
+logging:
+  level:
+    org.example.scrd: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.data: DEBUG

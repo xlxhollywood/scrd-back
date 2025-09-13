@@ -1,12 +1,16 @@
 package org.example.scrd.dto.request;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@NoArgsConstructor
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ReviewRequest {
     private String text;
     private int level;
