@@ -109,7 +109,6 @@ public class PartyCommentService {
     }
 
 
-    @Transactional(readOnly = true)
     public List<PartyCommentResponse> getCommentsByPost(Long postId) {
         List<PartyComment> allComments = commentRepository.findByPostId(postId);
 
