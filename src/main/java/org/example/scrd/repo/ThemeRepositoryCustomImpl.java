@@ -103,4 +103,15 @@ public class ThemeRepositoryCustomImpl implements ThemeRepositoryCustom {
                 .fetch();
     }
 
+    @Override
+    public List<Theme> findByTitleContainingOrBrandContaining(String titleKeyword, String brandKeyword) {
+        QTheme theme = QTheme.theme;
+
+        return queryFactory
+                .selectFrom(theme)
+                .where(theme.title.containsIgnoreCase(titleKeyword)
+                        .or(theme.brand.containsIgnoreCase(brandKeyword)))
+                .fetch();
+    }
+
 }

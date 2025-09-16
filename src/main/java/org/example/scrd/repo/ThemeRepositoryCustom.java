@@ -21,6 +21,6 @@ public interface ThemeRepositoryCustom {
             String sort
     );
 
-
+    List<Theme> findByTitleContainingOrBrandContaining(String titleKeyword, String brandKeyword);
 
 }

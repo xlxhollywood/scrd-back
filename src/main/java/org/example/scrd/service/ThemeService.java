@@ -108,4 +108,9 @@ public class ThemeService {
         return result;
     }
 
+    public List<ThemeResponse> searchThemes(String keyword) {
+        List<Theme> themes = themeRepository.findByTitleContainingOrBrandContaining(keyword, keyword);
+        return themes.stream().map(ThemeResponse::toDto).collect(Collectors.toList());
+    }
+
 }

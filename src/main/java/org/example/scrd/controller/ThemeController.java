@@ -111,8 +111,11 @@ public class ThemeController {
         return ResponseEntity.ok(themeService.getLocationCountsWithTotal());
     }
 
-
-
-
+    @Operation(summary = "키워드 기반 테마 검색", description = "키워드로 테마 제목이나 브랜드를 검색합니다")
+    @GetMapping("/theme/search")
+    public ResponseEntity<List<ThemeResponse>> searchThemes(@RequestParam String keyword) {
+        List<ThemeResponse> results = themeService.searchThemes(keyword);
+        return ResponseEntity.ok(results);
+    }
 
 }
