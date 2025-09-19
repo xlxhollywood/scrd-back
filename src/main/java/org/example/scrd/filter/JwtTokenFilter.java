@@ -48,7 +48,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 // Swagger UI 관련 경로 제외
                 uri.startsWith("/swagger-ui") ||
                 uri.startsWith("/v3/api-docs") ||
-                uri.equals("/swagger-ui.html")
+                uri.equals("/swagger-ui.html") ||
+                // Actuator 엔드포인트 제외 (모니터링용)
+                uri.startsWith("/actuator")
 
         ) {
             filterChain.doFilter(request, response);

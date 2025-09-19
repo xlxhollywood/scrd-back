@@ -84,10 +84,26 @@ public class ThemeService {
 
         String dateString = date != null ? date.toString() : LocalDate.now().toString();
 
+        // N+1 문제 해결: 테마 ID 리스트로 한 번에 조회
+        List<Integer> themeIds = themes.stream()
+                .map(theme -> theme.getId().intValue())
+                .collect(Collectors.toList());
+
+        // 한 번의 쿼리로 모든 테마의 예약 가능 시간 조회
+        List<ThemeDocument> themeDocuments = themeMongoRepository.findByThemeIdInAndDate(themeIds, dateString);
+
+        // Map으로 변환하여 O(1) 접근
+        Map<Integer, List<String>> availableTimesMap = themeDocuments.stream()
+                .collect(Collectors.toMap(
+                    ThemeDocument::getThemeId,
+                    ThemeDocument::getAvailableTimes
+                ));
+
         List<MobileThemeResponse> result = themes.stream().map(theme -> {
-            List<String> availableTimes = themeMongoRepository.findByThemeIdAndDate(theme.getId().intValue(), dateString)
-                    .map(ThemeDocument::getAvailableTimes)
-                    .orElse(Collections.emptyList());
+            List<String> availableTimes = availableTimesMap.getOrDefault(
+                theme.getId().intValue(),
+                Collections.emptyList()
+            );
             return MobileThemeResponse.from(theme, availableTimes);
         }).collect(Collectors.toList());
 

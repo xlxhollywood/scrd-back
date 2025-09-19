@@ -50,9 +50,9 @@ public class ThemeRepositoryCustomImpl implements ThemeRepositoryCustom {
         BooleanBuilder builder = new BooleanBuilder();
 
         if (keyword != null && !keyword.isEmpty()) {
-            builder.and(theme.title.containsIgnoreCase(keyword)
-                    .or(theme.brand.containsIgnoreCase(keyword))
-                    .or(theme.location.containsIgnoreCase(keyword)));
+            builder.and(theme.title.startsWithIgnoreCase(keyword)
+                    .or(theme.brand.startsWithIgnoreCase(keyword))
+                    .or(theme.location.startsWithIgnoreCase(keyword)));
         }
 
         if (horror != null) builder.and(theme.horror.eq(horror));

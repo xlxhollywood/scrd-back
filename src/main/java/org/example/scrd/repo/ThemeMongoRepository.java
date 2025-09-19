@@ -15,6 +15,9 @@ public interface ThemeMongoRepository extends MongoRepository<ThemeDocument, Obj
     List<ThemeDocument> findByThemeId(Integer themeId);
     Optional<ThemeDocument> findByThemeIdAndDate(Integer themeId, String date);
 
+    // N+1 문제 해결을 위한 배치 조회 메서드
+    List<ThemeDocument> findByThemeIdInAndDate(List<Integer> themeIds, String date);
+
 
 
 
