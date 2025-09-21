@@ -11,4 +11,6 @@ public interface PartyCommentRepository extends JpaRepository<PartyComment, Long
 
     List<PartyComment> findByPostId(Long postId);
 
+    void deleteByPostId(Long postId);
+
 }

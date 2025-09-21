@@ -27,5 +27,6 @@ public interface PartyJoinRepository extends JpaRepository<PartyJoin, Long> {
     @Query("SELECT j FROM PartyJoin j JOIN FETCH j.partyPost p WHERE j.user.id = :userId AND j.status IN ('APPROVED', 'REJECTED')")
     List<PartyJoin> findAllByUserIdAndStatusNotPending(@Param("userId") Long userId);
 
+    void deleteByPartyPostId(Long postId);
 
 }

@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 public class PartyService {
     private final PartyPostRepository postRepository;
     private final PartyJoinRepository joinRepository;
+    private final PartyCommentRepository commentRepository;
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
     private final ThemeRepository themeRepository;
@@ -172,7 +173,16 @@ public class PartyService {
             throw new IllegalStateException("본인이 작성한 글만 삭제할 수 있습니다.");
         }
 
+        // PartyComment 먼저 삭제
+        commentRepository.deleteByPostId(postId);
+
+        // PartyJoin 삭제
+        joinRepository.deleteByPartyPostId(postId);
+
+        // 관련 알림 삭제
         notificationRepository.deleteByRelatedPostId(postId);
+
+        // 게시글 삭제
         postRepository.delete(post);
     }
 
