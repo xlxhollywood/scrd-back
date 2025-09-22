@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.List;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.scrd.domain.User;
 import org.example.scrd.exception.DoNotLoginException;
 import org.example.scrd.exception.WrongTokenException;
@@ -20,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+@Slf4j
 @RequiredArgsConstructor
 public class JwtTokenFilter extends OncePerRequestFilter {
     private final AuthService authService; // 사용자 정보를 가져오는 서비스
@@ -36,9 +38,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         String uri = request.getRequestURI();
 
         // 디버깅 로그 추가 - 이것부터 찍혀야 함
-        System.out.println("=== JWT 필터 시작 ===");
-        System.out.println("URI: " + uri);
-        System.out.println("Method: " + request.getMethod());
+        log.debug("URI: {}, Method: {}", uri, request.getMethod());
 
         // 1) 특정 경로는 필터 패스
         if (uri.startsWith("/error") ||
@@ -128,14 +128,27 @@ public class JwtTokenFilter extends OncePerRequestFilter {
      */
     private void processAccessToken(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain, String token)
             throws ServletException, IOException {
-        // Access Token에서 사용자 정보 추출
-        User loginUser = authService.getLoginUser(JwtUtil.getUserId(token, SECRET_KEY));
+        try {
+            // Access Token에서 사용자 정보 추출
+            User loginUser = authService.getLoginUser(JwtUtil.getUserId(token, SECRET_KEY));
 
-        // 사용자 인증 설정
-        setAuthenticationForUser(request, loginUser);
+            // 사용자 인증 설정
+            setAuthenticationForUser(request, loginUser);
 
-        // 필터 체인의 다음 단계로 요청을 전달
-        filterChain.doFilter(request, response);
+            // 필터 체인의 다음 단계로 요청을 전달
+            filterChain.doFilter(request, response);
+        } catch (WrongTokenException e) {
+            // SSE 구독 요청인 경우 419 응답 반환 (클라이언트가 자동으로 리프레시 토큰으로 재시도)
+            if (request.getRequestURI().contains("/subscribe")) {
+                response.setStatus(419); // Authentication Timeout
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write("{\"error\": \"SSE 중 액세스 토큰 만료\"}");
+                return;
+            }
+            // 일반 요청은 기존 예외 처리
+            throw e;
+        }
     }
 
     /**
