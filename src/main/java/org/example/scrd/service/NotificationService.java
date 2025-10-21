@@ -95,4 +95,18 @@ public class NotificationService {
     public long getUnreadCount(Long userId) {
         return notificationRepository.countByReceiverIdAndIsReadFalse(userId);
     }
+
+    // 개별 알림 삭제
+    @Transactional
+    public void deleteNotification(Long notificationId, Long userId) {
+        Notification notification = notificationRepository.findById(notificationId)
+                .orElseThrow(() -> new NotFoundException("알림을 찾을 수 없습니다."));
+
+        // 본인의 알림인지 확인
+        if (!notification.getReceiver().getId().equals(userId)) {
+            throw new UnauthorizedAccessException();
+        }
+
+        notificationRepository.delete(notification);
+    }
 }

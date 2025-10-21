@@ -71,5 +71,13 @@ public class NotificationController {
         return ResponseEntity.ok(ApiResponse.success(count));
     }
 
+    @Operation(summary = "알림 삭제", description = "특정 알림을 삭제합니다")
+    @DeleteMapping("/notifications/{notificationId}")
+    public ResponseEntity<ApiResponse<Object>> deleteNotification(
+            @PathVariable Long notificationId,
+            @AuthenticationPrincipal User user) {
+        notificationService.deleteNotification(notificationId, user.getId());
+        return ResponseEntity.ok(ApiResponse.success());
+    }
 
 }
